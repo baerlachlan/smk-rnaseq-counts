@@ -1,0 +1,4 @@
+sample	unit	fq1	fq2
+S01	1	.test/data/reads_R1.fastq.gz	.test/data/reads_R2.fastq.gz
+S01	2	.test/data/reads_R1.fastq.gz	.test/data/reads_R2.fastq.gz
+S02	1	.test/data/reads_R1.fastq.gz	.test/data/reads_R2.fastq.gz

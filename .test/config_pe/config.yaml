@@ -1,0 +1,22 @@
+## Path to TSV file containing sample information (required columns: sample)
+samples: "config/samples.tsv"
+## Path to TSV file containing sequencing unit information (required columns: sample, unit, fq1, fq2)
+units: "config/units.tsv"
+
+ref:
+  ## Ensembl species name
+  species: danio_rerio
+  ## Emsembl release
+  release: 111
+  ## Genome build
+  build: GRCz11
+
+## Read length of raw FASTQ data
+## Used for calculating the maximum possible overhang for reads across splice junctions
+## (i.e. for STAR's --sjdbOverhang paramter)
+read_length: 98
+
+## Utilise UMIs for deduplication of reads
+## UMIs must be specified in the read ID header with separator ":"
+## Software such as UMI-tools or fastp can transfer this information if it does not already exist
+umi_dedup: True

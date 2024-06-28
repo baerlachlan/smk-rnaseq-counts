@@ -1,0 +1,14 @@
+include: "rules/common.smk"
+
+
+rule all:
+    input:
+        workflow_outputs(),
+
+
+include: "rules/refs.smk"
+include: "rules/fastqc.smk"
+include: "rules/trim.smk"
+include: "rules/merge.smk"
+include: "rules/align.smk"
+include: "rules/count.smk"

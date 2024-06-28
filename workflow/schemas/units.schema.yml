@@ -1,0 +1,19 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+properties:
+  sample:
+    type: string
+    description: name/id of the sample the unit was sequenced from
+  unit:
+    type: string
+    description: unit id
+  fq1:
+    type: string
+    description: path to FASTQ file (first FASTQ file for paired end sequencing)
+  fq2:
+    type: string
+    description: path to second FASTQ file (leave blank for single end sequencing)
+
+required:
+  - sample
+  - unit
+  - fq1
