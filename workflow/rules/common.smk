@@ -1,7 +1,7 @@
 import pandas as pd
 from snakemake.utils import min_version, validate
 
-min_version("8.4.2")
+min_version("8.14.0")
 
 
 configfile: "config/config.yaml"
@@ -201,8 +201,5 @@ def workflow_outputs():
 
     ## Processed counts
     outputs.append("results/count/all.featureCounts")
-    # outputs.append("resources/genome.fa")
-    # outputs.append("results/trim/fastq/S01_1_R1.fastq.gz")
-    # outputs.extend(expand("results/trim/fastq/{SAMPLE}_{UNIT}_{PAIRTAG}.fastq.gz", SAMPLE=units["sample"], UNIT=units["unit"], PAIRTAG=pair_tags))
 
     return outputs

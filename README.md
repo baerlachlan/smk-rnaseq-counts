@@ -5,11 +5,11 @@ This Snakemake workflow implements the pre-processing steps to achieve gene-leve
 ## Features
 
 - Downloading/indexing of genome and annotations
-- Quality reports (FastQC)
 - Trimming (fastp)
 - Merging of sequencing units
 - Alignment (STAR 2-pass mode)
 - Counting (Subread featureCounts)
+- Quality reports (FastQC)
 
 ## Usage
 
