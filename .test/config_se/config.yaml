@@ -16,7 +16,13 @@ ref:
 ## (i.e. for STAR's --sjdbOverhang paramter)
 read_length: 98
 
-## Utilise UMIs for deduplication of reads
-## UMIs must be specified in the read ID header with separator ":"
-## Software such as UMI-tools or fastp can transfer this information if it does not already exist
-umi_dedup: True
+## featureCounts configuration
+count:
+  ## Strandedness of the library, passed to the -s option
+  ## 0: unstranded, 1: stranded, and 2: reversely stranded
+  strandedness: 0
+  ## -J count the number of reads supporting each exon-exon junction
+  ## -p indicates the BAM files contain paired-end data, omit this flag for single-end
+  ## --fracOverlap minimum fraction of overlapping bases required for read assignment to a feature
+  ## --minOverlap minimum number of overlapping bases required for read assignment to a feature
+  extra: "-J -p --fracOverlap 1 --minOverlap 35"

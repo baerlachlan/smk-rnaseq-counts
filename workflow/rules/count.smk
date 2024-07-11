@@ -10,7 +10,7 @@ rule count:
             ".featureCounts.jcounts",
         ),
     params:
-        strand=0,  # optional; strandness of the library (0: unstranded [default], 1: stranded, and 2: reversely stranded)
-        extra="-Q 1 --minOverlap 35 --fracOverlap 0.9 -J",
+        strand=config["count"]["strandedness"],
+        extra=config["count"]["extra"],
     wrapper:
         "v3.7.0/bio/subread/featurecounts"
