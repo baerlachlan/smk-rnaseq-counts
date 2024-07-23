@@ -23,6 +23,7 @@ count:
   strandedness: 0
   ## -J count the number of reads supporting each exon-exon junction
   ## -p indicates the BAM files contain paired-end data, omit this flag for single-end
+  ## --countReadPairs count read pairs (fragments) instead of reads. Only required for paired end data. This was introduced in subread v2.0.2
   ## --fracOverlap minimum fraction of overlapping bases required for read assignment to a feature
   ## --minOverlap minimum number of overlapping bases required for read assignment to a feature
-  extra: "-J -p --fracOverlap 1 --minOverlap 35"
+  extra: "-J -p --countReadPairs --fracOverlap 1 --minOverlap 35"
