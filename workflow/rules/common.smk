@@ -200,6 +200,8 @@ def workflow_outputs():
     )
 
     ## Processed counts
-    outputs.append("results/count/all.featureCounts")
+    strandedness_labels = ["unstranded", "stranded", "reverse"]
+    for i in config["count"]["strandedness"]:
+        outputs.append(f"results/count/{strandedness_labels[i]}/all.featureCounts")
 
     return outputs

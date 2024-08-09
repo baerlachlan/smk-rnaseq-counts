@@ -26,6 +26,8 @@ Test data and configurations are available for quick testing of this workflow.
 Simply copy the desired config directory as follows:
 
 ```bash
+## Remove example config
+rm -r config/
 ## Paired-end
 cp -r .test/config_pe/ config/
 ## Single-end
