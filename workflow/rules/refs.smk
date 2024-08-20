@@ -7,18 +7,7 @@ rule genome_get:
         build=config["ref"]["build"],
         release=config["ref"]["release"],
     wrapper:
-        "v3.7.0/bio/reference/ensembl-sequence"
-
-
-rule genome_index:
-    input:
-        "resources/genome.fa",
-    output:
-        temp("resources/genome.fa.fai"),
-    params:
-        extra="",
-    wrapper:
-        "v3.7.0/bio/samtools/faidx"
+        "v4.0.0/bio/reference/ensembl-sequence"
 
 
 rule annotation_get:
@@ -30,7 +19,7 @@ rule annotation_get:
         release=config["ref"]["release"],
         flavor="",
     wrapper:
-        "v3.7.0/bio/reference/ensembl-annotation"
+        "v4.0.0/bio/reference/ensembl-annotation"
 
 
 rule star_index:
@@ -43,4 +32,4 @@ rule star_index:
         sjdbOverhang=int(config["read_length"]) - 1,
         extra="",
     wrapper:
-        "v3.7.0/bio/star/index"
+        "v4.0.0/bio/star/index"

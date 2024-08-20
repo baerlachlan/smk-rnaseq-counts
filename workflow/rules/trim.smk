@@ -8,7 +8,7 @@ rule trim_se:
     params:
         extra="--qualified_quality_phred 20 --length_required 35 --trim_poly_g",
     wrapper:
-        "v3.7.0/bio/fastp"
+        "v4.0.0/bio/fastp"
 
 
 rule trim_pe:
@@ -26,7 +26,7 @@ rule trim_pe:
     params:
         extra="--detect_adapter_for_pe --qualified_quality_phred 20 --length_required 35 --trim_poly_g",
     wrapper:
-        "v3.7.0/bio/fastp"
+        "v4.0.0/bio/fastp"
 
 
 rule trim_md5:

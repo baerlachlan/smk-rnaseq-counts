@@ -13,6 +13,7 @@ include: "rules/merge.smk"
 include: "rules/align.smk"
 include: "rules/count.smk"
 
+
 localrules:
-  genome_get,
-  annotation_get,
+    genome_get,
+    annotation_get,

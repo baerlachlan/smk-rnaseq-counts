@@ -14,7 +14,8 @@ rule count_s0:
         strand=0,
         extra=config["count"]["extra"],
     wrapper:
-        "v3.7.0/bio/subread/featurecounts"
+        "v4.0.0/bio/subread/featurecounts"
+
 
 ## Stranded
 rule count_s1:
@@ -32,7 +33,8 @@ rule count_s1:
         strand=1,
         extra=config["count"]["extra"],
     wrapper:
-        "v3.7.0/bio/subread/featurecounts"
+        "v4.0.0/bio/subread/featurecounts"
+
 
 ## Reverse-stranded
 rule count_s2:
@@ -50,4 +52,4 @@ rule count_s2:
         strand=2,
         extra=config["count"]["extra"],
     wrapper:
-        "v3.7.0/bio/subread/featurecounts"
+        "v4.0.0/bio/subread/featurecounts"

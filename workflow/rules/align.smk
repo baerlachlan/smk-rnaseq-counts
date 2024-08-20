@@ -9,7 +9,7 @@ rule align:
     params:
         extra=f"--sjdbOverhang {int(config["read_length"]) - 1} --outSAMtype BAM SortedByCoordinate --twopassMode Basic",
     wrapper:
-        "v3.7.0/bio/star/align"
+        "v4.0.0/bio/star/align"
 
 
 rule align_md5:

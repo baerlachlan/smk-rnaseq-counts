@@ -7,7 +7,7 @@ rule fastqc_raw:
     params:
         extra="--noextract",
     wrapper:
-        "v3.7.0/bio/fastqc"
+        "v4.0.0/bio/fastqc"
 
 
 rule fastqc_trim:
@@ -19,7 +19,7 @@ rule fastqc_trim:
     params:
         extra="--noextract",
     wrapper:
-        "v3.7.0/bio/fastqc"
+        "v4.0.0/bio/fastqc"
 
 
 rule fastqc_align:
@@ -31,4 +31,4 @@ rule fastqc_align:
     params:
         extra="--noextract",
     wrapper:
-        "v3.7.0/bio/fastqc"
+        "v4.0.0/bio/fastqc"
