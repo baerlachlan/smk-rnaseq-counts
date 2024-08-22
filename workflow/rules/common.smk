@@ -159,36 +159,37 @@ def workflow_outputs():
     outputs = []
 
     ## FastQC outputs
-    for sample in samples["sample"]:
-        sample_units = units.loc[sample]
-        ## Raw
-        outputs.extend(
-            expand(
-                "results/raw_data/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.{EXT}",
-                SAMPLE=sample,
-                UNIT=sample_units["unit"],
-                PAIRTAG=pair_tags,
-                EXT=["html", "zip"],
+    if config["fastqc"]:
+        for sample in samples["sample"]:
+            sample_units = units.loc[sample]
+            ## Raw
+            outputs.extend(
+                expand(
+                    "results/raw_data/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.{EXT}",
+                    SAMPLE=sample,
+                    UNIT=sample_units["unit"],
+                    PAIRTAG=pair_tags,
+                    EXT=["html", "zip"],
+                )
             )
-        )
-        ## Trim
-        outputs.extend(
-            expand(
-                "results/trim/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.{EXT}",
-                SAMPLE=sample,
-                UNIT=sample_units["unit"],
-                PAIRTAG=pair_tags,
-                EXT=["html", "zip"],
+            ## Trim
+            outputs.extend(
+                expand(
+                    "results/trim/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.{EXT}",
+                    SAMPLE=sample,
+                    UNIT=sample_units["unit"],
+                    PAIRTAG=pair_tags,
+                    EXT=["html", "zip"],
+                )
             )
-        )
-        ## Align
-        outputs.extend(
-            expand(
-                "results/align/FastQC/{SAMPLE}_fastqc.{EXT}",
-                SAMPLE=sample,
-                EXT=["html", "zip"],
+            ## Align
+            outputs.extend(
+                expand(
+                    "results/align/FastQC/{SAMPLE}_fastqc.{EXT}",
+                    SAMPLE=sample,
+                    EXT=["html", "zip"],
+                )
             )
-        )
 
     ## md5sums
     outputs.extend(

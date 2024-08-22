@@ -1,0 +1,76 @@
+default-resources:
+  slurm_extra: "''"
+
+set-threads:
+  ## refs
+  genome_get: 1
+  annotation_get: 1
+  star_index: 8
+  ## fastqc
+  fastqc_raw: 1
+  fastqc_trim: 1
+  fastqc_align: 1
+  ## trim
+  trim_se: 1
+  trim_pe: 1
+  trim_md5: 1
+  ## merge
+  merge: 1
+  merge_md5: 1
+  ## align
+  align: 16
+  align_md5: 1
+  ## count
+  count_s0: 4
+  count_s1: 4
+  count_s2: 4
+
+set-resources:
+  ## refs
+  star_index:
+    runtime: 30
+    mem_mb: 32768
+  ## fastqc
+  fastqc_raw:
+    runtime: 10
+    mem_mb: 1024
+  fastqc_trim:
+    runtime: 10
+    mem_mb: 1024
+  fastqc_align:
+    runtime: 10
+    mem_mb: 1024
+  ## trim
+  trim_se:
+    runtime: 10
+    mem_mb: 1024
+  trim_pe:
+    runtime: 10
+    mem_mb: 1024
+  trim_md5:
+    runtime: 10
+    mem_mb: 1024
+  ## merge
+  merge:
+    runtime: 30
+    mem_mb: 4096
+  merge_md5:
+    runtime: 60
+    mem_mb: 1024
+  ## align
+  align:
+    runtime: 10
+    mem_mb: 32768
+  align_md5:
+    runtime: 10
+    mem_mb: 1024
+  ## count
+  count_s0:
+    runtime: 30
+    mem_mb: 4096
+  count_s1:
+    runtime: 30
+    mem_mb: 4096
+  count_s2:
+    runtime: 30
+    mem_mb: 4096

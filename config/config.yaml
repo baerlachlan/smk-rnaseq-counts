@@ -16,6 +16,9 @@ ref:
 ## (i.e. for STAR's --sjdbOverhang paramter)
 read_length: 98
 
+## Boolean specifying whether FastQC output is desired
+fastqc: True
+
 ## featureCounts configuration
 count:
   ## Strandedness of the library, passed to the -s option

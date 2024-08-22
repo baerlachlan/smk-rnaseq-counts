@@ -1,0 +1,84 @@
+default-resources:
+  slurm_extra: "''"
+
+set-threads:
+  ## refs
+  genome_get: 1
+  genome_index: 1
+  annotation_get: 1
+  star_index: 8
+  ## fastqc
+  fastqc_raw: 1
+  fastqc_trim: 1
+  fastqc_align: 1
+  ## trim
+  trim_se: 4
+  trim_pe: 4
+  trim_md5: 1
+  ## merge
+  merge: 1
+  merge_md5: 1
+  ## align
+  align: 16
+  align_md5: 1
+  ## count
+  count_s0: 8
+  count_s1: 8
+  count_s2: 8
+
+set-resources:
+  ## refs
+  genome_index:
+    runtime: 10
+    mem_mb: 1024
+  star_index:
+    runtime: 90
+    mem_mb: 65536
+  ## fastqc
+  fastqc_raw:
+    runtime: 60
+    mem_mb: 2048
+  fastqc_trim:
+    runtime: 60
+    mem_mb: 2048
+  fastqc_align:
+    runtime: 60
+    mem_mb: 2048
+  ## trim
+  trim_se:
+    runtime: 60
+    mem_mb: 4096
+  trim_pe:
+    runtime: 60
+    mem_mb: 4096
+  trim_md5:
+    runtime: 60
+    mem_mb: 1024
+  ## merge
+  merge:
+    runtime: 30
+    mem_mb: 4096
+  merge_md5:
+    runtime: 60
+    mem_mb: 1024
+  ## align
+  align:
+    runtime: 180
+    mem_mb: 65536
+    slurm_extra: "'--gres=tmpfs:200G'"  # Needs to be about 5x total input fastq size
+  align_md5:
+    runtime: 120
+    mem_mb: 1024
+  ## count
+  count_s0:
+    runtime: 240
+    mem_mb: 8192
+    slurm_extra: "'--gres=tmpfs:50G'"
+  count_s1:
+    runtime: 240
+    mem_mb: 8192
+    slurm_extra: "'--gres=tmpfs:50G'"
+  count_s2:
+    runtime: 240
+    mem_mb: 8192
+    slurm_extra: "'--gres=tmpfs:50G'"
