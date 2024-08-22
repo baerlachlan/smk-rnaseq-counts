@@ -23,7 +23,7 @@ If the intention is to run the workflow in an offline environment, please see [R
 
 For compatibility across environments, the source code of this workflow is available via [Releases](https://github.com/baerlachlan/smk-rnaseq-star-featurecounts/releases).
 
-1. Download and extract the workflow's [latest release](https://github.com/baerlachlan/smk-rnaseq-gatk-variants/releases/latest)
+1. Download and extract the workflow's [latest release](https://github.com/baerlachlan/smk-rnaseq-star-featurecounts/releases/latest)
 1. Remove unrequired files
     ```bash
     rm .gitignore .snakemake-workflow-catalog.yml
