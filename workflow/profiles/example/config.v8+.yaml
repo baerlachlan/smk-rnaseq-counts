@@ -14,13 +14,13 @@ set-threads:
   ## trim
   trim_se: 4
   trim_pe: 4
-  trim_md5: 1
+  trim_md5: 8
   ## merge
   merge: 1
-  merge_md5: 1
+  merge_md5: 8
   ## align
   align: 16
-  align_md5: 1
+  align_md5: 8
   ## count
   count_s0: 8
   count_s1: 8

@@ -14,7 +14,9 @@ rule merge_md5:
         merge_md5_inputs(),
     output:
         "results/merge/fastq/md5.txt",
+    conda:
+        "../envs/parallel.yml"
     shell:
         """
-        md5sum {input} > {output}
+        echo "{input}" | tr " " "\n" | parallel -j {threads} md5sum  > {output}
         """
