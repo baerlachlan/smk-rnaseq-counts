@@ -8,7 +8,6 @@ rule count_s0:
             "results/count/unstranded/all",
             ".featureCounts",
             ".featureCounts.summary",
-            ".featureCounts.jcounts",
         ),
     params:
         strand=0,
@@ -27,7 +26,6 @@ rule count_s1:
             "results/count/stranded/all",
             ".featureCounts",
             ".featureCounts.summary",
-            ".featureCounts.jcounts",
         ),
     params:
         strand=1,
@@ -46,7 +44,6 @@ rule count_s2:
             "results/count/reverse/all",
             ".featureCounts",
             ".featureCounts.summary",
-            ".featureCounts.jcounts",
         ),
     params:
         strand=2,
