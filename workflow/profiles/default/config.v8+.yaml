@@ -4,9 +4,10 @@ default-resources:
 set-threads:
   ## refs
   genome_get: 1
-  genome_index: 1
   annotation_get: 1
   star_index: 8
+  salmon_decoy: 2
+  salmon_index: 4
   ## fastqc
   fastqc_raw: 1
   fastqc_trim: 1
@@ -22,18 +23,23 @@ set-threads:
   align: 16
   align_md5: 8
   ## count
-  count_s0: 8
-  count_s1: 8
-  count_s2: 8
+  featureCounts_s0: 8
+  featureCounts_s1: 8
+  featureCounts_s2: 8
+  ## salmon
+  salmon_quant: 8
 
 set-resources:
   ## refs
-  genome_index:
-    runtime: 10
-    mem_mb: 1024
   star_index:
     runtime: 90
     mem_mb: 65536
+  salmon_decoy:
+    runtime: 30
+    mem_mb: 4096
+  salmon_index:
+    runtime: 60
+    mem_mb: 32768
   ## fastqc
   fastqc_raw:
     runtime: 60
@@ -47,17 +53,17 @@ set-resources:
   ## trim
   trim_se:
     runtime: 60
-    mem_mb: 4096
+    mem_mb: 8192
   trim_pe:
     runtime: 60
-    mem_mb: 4096
+    mem_mb: 8192
   trim_md5:
     runtime: 60
     mem_mb: 1024
   ## merge
   merge:
     runtime: 30
-    mem_mb: 4096
+    mem_mb: 8192
   merge_md5:
     runtime: 60
     mem_mb: 1024
@@ -70,15 +76,19 @@ set-resources:
     runtime: 120
     mem_mb: 1024
   ## count
-  count_s0:
+  featureCounts_s0:
     runtime: 240
     mem_mb: 8192
     slurm_extra: "'--gres=tmpfs:50G'"
-  count_s1:
+  featureCounts_s1:
     runtime: 240
     mem_mb: 8192
     slurm_extra: "'--gres=tmpfs:50G'"
-  count_s2:
+  featureCounts_s2:
     runtime: 240
     mem_mb: 8192
     slurm_extra: "'--gres=tmpfs:50G'"
+  ## salmon
+  salmon_quant:
+    runtime: 180
+    mem_mb: 32768

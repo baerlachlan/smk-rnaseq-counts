@@ -12,6 +12,7 @@ include: "rules/trim.smk"
 include: "rules/merge.smk"
 include: "rules/align.smk"
 include: "rules/count.smk"
+include: "rules/salmon.smk"
 
 
 localrules:

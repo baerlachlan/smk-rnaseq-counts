@@ -20,7 +20,7 @@ read_length: 98
 fastqc: True
 
 ## featureCounts configuration
-count:
+featureCounts:
   ## Strandedness of the library, passed to the -s option
   ## 0: unstranded, 1: stranded, and 2: reversely stranded
   ## Requires a list. Multiple choices can be specified if the strandedness is unknown, producing a featureCounts output for each
@@ -31,3 +31,12 @@ count:
   ## --fracOverlap minimum fraction of overlapping bases required for read assignment to a feature
   ## --minOverlap minimum number of overlapping bases required for read assignment to a feature
   extra: "-p --countReadPairs --fracOverlap 1 --minOverlap 35"
+
+## salmon configuration
+salmon:
+  index:
+    ## Extra params passed to salmon index
+    extra: ""
+  quant:
+    ## Extra params passed to salmon quant
+    extra: "--numBootstraps 100"

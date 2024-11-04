@@ -6,6 +6,8 @@ set-threads:
   genome_get: 1
   annotation_get: 1
   star_index: 8
+  salmon_decoy: 2
+  salmon_index: 4
   ## fastqc
   fastqc_raw: 1
   fastqc_trim: 1
@@ -21,14 +23,22 @@ set-threads:
   align: 16
   align_md5: 1
   ## count
-  count_s0: 4
-  count_s1: 4
-  count_s2: 4
+  featureCounts_s0: 4
+  featureCounts_s1: 4
+  featureCounts_s2: 4
+  ## salmon
+  salmon_quant: 4
 
 set-resources:
   ## refs
   star_index:
     runtime: 30
+    mem_mb: 32768
+  salmon_decoy:
+    runtime: 30
+    mem_mb: 4096
+  salmon_index:
+    runtime: 60
     mem_mb: 32768
   ## fastqc
   fastqc_raw:
@@ -65,12 +75,16 @@ set-resources:
     runtime: 10
     mem_mb: 1024
   ## count
-  count_s0:
+  featureCounts_s0:
     runtime: 30
     mem_mb: 4096
-  count_s1:
+  featureCounts_s1:
     runtime: 30
     mem_mb: 4096
-  count_s2:
+  featureCounts_s2:
     runtime: 30
     mem_mb: 4096
+  ## salmon
+  salmon_quant:
+    runtime: 30
+    mem_mb: 32768

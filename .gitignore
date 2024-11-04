@@ -1,5 +1,7 @@
-.snakemake/
-logs/
-resources/
-workflow/profiles/default
-results/
+## Workflow-specific
+.snakemake/*
+logs/*
+resources/*
+*.jcounts
+*.featureCounts
+results/salmon/*/aux_info/bootstrap/

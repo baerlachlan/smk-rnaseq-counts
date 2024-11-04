@@ -104,6 +104,85 @@ def align_inputs(wildcards):
         return {"fq1": "results/merge/fastq/{SAMPLE}_R0.fastq.gz"}
 
 
+def align_inputs(wildcards):
+    sample_units = units.loc[wildcards.SAMPLE]
+    if is_paired_end(wildcards.SAMPLE):
+        if len(sample_units) == 1:
+            return {
+                "fq1": expand(
+                    "results/trim/fastq/{{SAMPLE}}_{UNIT}_R1.fastq.gz",
+                    UNIT=sample_units["unit"]
+                ),
+                "fq2": expand(
+                    "results/trim/fastq/{{SAMPLE}}_{UNIT}_R2.fastq.gz",
+                    UNIT=sample_units["unit"]
+                ),
+                # "fq1": "results/trim/fastq/{SAMPLE}_{UNIT}_R1.fastq.gz",
+                # "fq2": "results/trim/fastq/{SAMPLE}_{UNIT}_R2.fastq.gz",
+            }
+        else:
+            return {
+                "fq1": "results/merge/fastq/{SAMPLE}_R1.fastq.gz",
+                "fq2": "results/merge/fastq/{SAMPLE}_R2.fastq.gz",
+            }
+    else:
+        if len(sample_units) == 1:
+            return {
+                "fq1": expand(
+                    "results/trim/fastq/{{SAMPLE}}_{UNIT}_R0.fastq.gz",
+                    UNIT=sample_units["unit"]
+                )
+            }
+            # return {"fq1": "results/trim/fastq/{SAMPLE}_{UNIT}_R0.fastq.gz"}
+        else:
+            return {"fq1": "results/merge/fastq/{SAMPLE}_R0.fastq.gz"}
+
+
+def salmon_inputs(wildcards):
+    sample_units = units.loc[wildcards.SAMPLE]
+    if is_paired_end(wildcards.SAMPLE):
+        if len(sample_units) == 1:
+            return {
+                "r1": expand(
+                    "results/trim/fastq/{SAMPLE}_{UNIT}_R1.fastq.gz",
+                    SAMPLE=sample_units["sample"],
+                    UNIT=sample_units["unit"],
+                ),
+                "r2": expand(
+                    "results/trim/fastq/{SAMPLE}_{UNIT}_R2.fastq.gz",
+                    SAMPLE=sample_units["sample"],
+                    UNIT=sample_units["unit"],
+                ),
+            }
+        else:
+            return {
+                "r1": expand(
+                    "results/merge/fastq/{SAMPLE}_R1.fastq.gz",
+                    SAMPLE=sample_units["sample"],
+                ),
+                "r2": expand(
+                    "results/merge/fastq/{SAMPLE}_R2.fastq.gz",
+                    SAMPLE=sample_units["sample"],
+                ),
+            }
+    else:
+        if len(sample_units) == 1:
+            return {
+                "r": expand(
+                    "results/trim/fastq/{SAMPLE}_{UNIT}_R0.fastq.gz",
+                    SAMPLE=sample_units["sample"],
+                    UNIT=sample_units["unit"],
+                ),
+            }
+        else:
+            return {
+                "r": expand(
+                    "results/merge/fastq/{SAMPLE}_R0.fastq.gz",
+                    SAMPLE=sample_units["sample"],
+                ),
+            }
+
+
 def trim_md5_inputs():
     inputs = []
     for sample in samples["sample"]:
@@ -123,13 +202,14 @@ def merge_md5_inputs():
     inputs = []
     for sample in samples["sample"]:
         sample_units = units.loc[sample]
-        inputs.extend(
-            expand(
-                "results/merge/fastq/{SAMPLE}_{PAIRTAG}.fastq.gz",
-                SAMPLE=sample_units["sample"],
-                PAIRTAG=pair_tags,
+        if len(sample_units) > 1:
+            inputs.extend(
+                expand(
+                    "results/merge/fastq/{SAMPLE}_{PAIRTAG}.fastq.gz",
+                    SAMPLE=sample_units["sample"],
+                    PAIRTAG=pair_tags,
+                )
             )
-        )
     return inputs
 
 
@@ -192,17 +272,19 @@ def workflow_outputs():
             )
 
     ## md5sums
-    outputs.extend(
-        [
-            "results/trim/fastq/md5.txt",
-            "results/merge/fastq/md5.txt",
-            "results/align/bam/md5.txt",
-        ]
-    )
+    outputs.extend(["results/trim/fastq/md5.txt", "results/align/bam/md5.txt"])
+    if len(list(set(units["unit"]))) > 1:
+        outputs.extend(["results/merge/fastq/md5.txt"])
 
-    ## Processed counts
+
+    ## Gene-level counts (featureCounts)
     strandedness_labels = ["unstranded", "stranded", "reverse"]
-    for i in config["count"]["strandedness"]:
+    for i in config["featureCounts"]["strandedness"]:
         outputs.append(f"results/count/{strandedness_labels[i]}/all.featureCounts")
+
+
+    ## Transcript-level counts (salmon)
+    outputs.extend(expand("results/salmon/{SAMPLE}/quant.sf", SAMPLE=samples["sample"]))
+
 
     return outputs

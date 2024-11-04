@@ -1,16 +1,17 @@
-# Snakemake workflow for generating gene-level counts from RNA-seq data
+# Snakemake workflow for generating counts from RNA-seq data
 
-This Snakemake workflow implements the pre-processing steps to achieve gene-level read counts from raw RNA-seq data.
+This Snakemake workflow implements the pre-processing steps to achieve gene- and transcript-level read counts from raw RNA-seq data.
 
 ## Features
 
+- Gene-level counts (`Subread featureCounts`)
+- Transcript-level counts (`salmon`)
 - Quality reports (`FastQC`)
-- Downloading/indexing of genome and annotations
 - Trimming (`fastp`)
+- Alignment (`STAR` 2-pass mode)
+- Downloading/indexing of genome and annotations
 - Merging of sequencing units (e.g. samples split across multiple lanes)
 - Single- or paired-end read compatibility
-- Alignment (`STAR` 2-pass mode)
-- Gene-level counting (`Subread` `featureCounts`)
 
 ## Standardised usage
 
@@ -26,16 +27,12 @@ For compatibility across environments, the source code of this workflow is avail
 1. Download and extract the workflow's [latest release](https://github.com/baerlachlan/smk-rnaseq-star-featurecounts/releases/latest)
 1. Remove unrequired files
     ```bash
-    rm .gitignore .snakemake-workflow-catalog.yml
+    rm .snakemake-workflow-catalog.yml
     ```
 1. Follow the instructions in [`config/README.md`](config/README.md) to modify `config/samples.tsv` and `config/units.tsv`
 1. Follow the comments in `config/config.yaml` to configure the workflow parameters
-1. Use the example profile in `workflow/profiles/example/config.v8+.yaml` as a guide to fine-tune workflow-specific resource configuration
+1. Use the example profile in `workflow/profiles/default/config.v8+.yaml` as a guide to fine-tune workflow-specific resource configuration
     - NOTE: the example profile has been designed for compatibility with my [SLURM profile](https://github.com/baerlachlan/smk-cluster-generic-slurm)
-    - To automatically enable a workflow-specific profile, move it to `workflow/profiles/default`, for example:
-        ```bash
-        cp -r workflow/profiles/example workflow/profiles/default
-        ```
 1. Execute the workflow
     ```bash
     snakemake

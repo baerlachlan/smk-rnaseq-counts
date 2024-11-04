@@ -1,5 +1,5 @@
 ## Unstranded
-rule count_s0:
+rule featureCounts_s0:
     input:
         samples=expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]),
         annotation="resources/annotation.gtf",
@@ -11,13 +11,13 @@ rule count_s0:
         ),
     params:
         strand=0,
-        extra=config["count"]["extra"],
+        extra=config["featureCounts"]["extra"],
     wrapper:
         "v4.0.0/bio/subread/featurecounts"
 
 
 ## Stranded
-rule count_s1:
+rule featureCounts_s1:
     input:
         samples=expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]),
         annotation="resources/annotation.gtf",
@@ -29,13 +29,13 @@ rule count_s1:
         ),
     params:
         strand=1,
-        extra=config["count"]["extra"],
+        extra=config["featureCounts"]["extra"],
     wrapper:
         "v4.0.0/bio/subread/featurecounts"
 
 
 ## Reverse-stranded
-rule count_s2:
+rule featureCounts_s2:
     input:
         samples=expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]),
         annotation="resources/annotation.gtf",
@@ -47,6 +47,6 @@ rule count_s2:
         ),
     params:
         strand=2,
-        extra=config["count"]["extra"],
+        extra=config["featureCounts"]["extra"],
     wrapper:
         "v4.0.0/bio/subread/featurecounts"
