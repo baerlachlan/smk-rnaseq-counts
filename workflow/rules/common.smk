@@ -268,7 +268,7 @@ def workflow_outputs():
     if config["featureCounts"]["activate"]:
         strandedness_labels = ["unstranded", "stranded", "reverse"]
         for i in config["featureCounts"]["strandedness"]:
-            outputs.append(f"results/count/{strandedness_labels[i]}/all.featureCounts")
+            outputs.append(f"results/featureCounts/{strandedness_labels[i]}/all.featureCounts")
 
 
     ## Transcript-level counts (salmon)

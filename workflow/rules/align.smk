@@ -1,7 +1,7 @@
 rule align:
     input:
         unpack(align_inputs),
-        idx="resources/genome",
+        idx="resources/star",
     output:
         aln=temp("results/align/bam/{SAMPLE}.bam"),
         log="results/align/log/{SAMPLE}.log",

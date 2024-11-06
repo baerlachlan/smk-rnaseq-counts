@@ -1,7 +1,7 @@
 ## Path to TSV file containing sample information (required columns: sample)
-samples: "config/samples.tsv"
+samples: ".test/config_pe/samples.tsv"
 ## Path to TSV file containing sequencing unit information (required columns: sample, unit, fq1, fq2)
-units: "config/units.tsv"
+units: ".test/config_pe/units.tsv"
 
 ref:
   ## Ensembl species name

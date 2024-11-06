@@ -39,7 +39,7 @@ rule star_index:
         fasta="resources/genome.fa",
         gtf="resources/annotation.gtf",
     output:
-        temp(directory("resources/genome")),
+        temp(directory("resources/star")),
     params:
         sjdbOverhang=int(config["read_length"]) - 1,
         extra="",

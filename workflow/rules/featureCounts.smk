@@ -5,7 +5,7 @@ rule featureCounts_s0:
         annotation="resources/annotation.gtf",
     output:
         multiext(
-            "results/count/unstranded/all",
+            "results/featureCounts/unstranded/all",
             ".featureCounts",
             ".featureCounts.summary",
         ),
@@ -23,7 +23,7 @@ rule featureCounts_s1:
         annotation="resources/annotation.gtf",
     output:
         multiext(
-            "results/count/stranded/all",
+            "results/featureCounts/stranded/all",
             ".featureCounts",
             ".featureCounts.summary",
         ),
@@ -41,7 +41,7 @@ rule featureCounts_s2:
         annotation="resources/annotation.gtf",
     output:
         multiext(
-            "results/count/reverse/all",
+            "results/featureCounts/reverse/all",
             ".featureCounts",
             ".featureCounts.summary",
         ),
