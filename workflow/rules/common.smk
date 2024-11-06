@@ -95,16 +95,6 @@ def merge_inputs(wildcards):
 
 
 def align_inputs(wildcards):
-    if is_paired_end(wildcards.SAMPLE):
-        return {
-            "fq1": "results/merge/fastq/{SAMPLE}_R1.fastq.gz",
-            "fq2": "results/merge/fastq/{SAMPLE}_R2.fastq.gz",
-        }
-    else:
-        return {"fq1": "results/merge/fastq/{SAMPLE}_R0.fastq.gz"}
-
-
-def align_inputs(wildcards):
     sample_units = units.loc[wildcards.SAMPLE]
     if is_paired_end(wildcards.SAMPLE):
         if len(sample_units) == 1:
@@ -117,8 +107,6 @@ def align_inputs(wildcards):
                     "results/trim/fastq/{{SAMPLE}}_{UNIT}_R2.fastq.gz",
                     UNIT=sample_units["unit"]
                 ),
-                # "fq1": "results/trim/fastq/{SAMPLE}_{UNIT}_R1.fastq.gz",
-                # "fq2": "results/trim/fastq/{SAMPLE}_{UNIT}_R2.fastq.gz",
             }
         else:
             return {
@@ -133,7 +121,6 @@ def align_inputs(wildcards):
                     UNIT=sample_units["unit"]
                 )
             }
-            # return {"fq1": "results/trim/fastq/{SAMPLE}_{UNIT}_R0.fastq.gz"}
         else:
             return {"fq1": "results/merge/fastq/{SAMPLE}_R0.fastq.gz"}
 
@@ -278,13 +265,15 @@ def workflow_outputs():
 
 
     ## Gene-level counts (featureCounts)
-    strandedness_labels = ["unstranded", "stranded", "reverse"]
-    for i in config["featureCounts"]["strandedness"]:
-        outputs.append(f"results/count/{strandedness_labels[i]}/all.featureCounts")
+    if config["featureCounts"]["activate"]:
+        strandedness_labels = ["unstranded", "stranded", "reverse"]
+        for i in config["featureCounts"]["strandedness"]:
+            outputs.append(f"results/count/{strandedness_labels[i]}/all.featureCounts")
 
 
     ## Transcript-level counts (salmon)
-    outputs.extend(expand("results/salmon/{SAMPLE}/quant.sf", SAMPLE=samples["sample"]))
+    if config["salmon"]["activate"]:
+        outputs.extend(expand("results/salmon/{SAMPLE}/quant.sf", SAMPLE=samples["sample"]))
 
 
     return outputs

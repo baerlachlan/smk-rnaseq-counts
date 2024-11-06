@@ -21,6 +21,8 @@ fastqc: True
 
 ## featureCounts configuration
 featureCounts:
+  ## Specify as True to produce gene-level counts
+  activate: True
   ## Strandedness of the library, passed to the -s option
   ## 0: unstranded, 1: stranded, and 2: reversely stranded
   ## Requires a list. Multiple choices can be specified if the strandedness is unknown, producing a featureCounts output for each
@@ -34,6 +36,8 @@ featureCounts:
 
 ## salmon configuration
 salmon:
+  ## Specify as True to produce gene-level counts
+  activate: True
   index:
     ## Extra params passed to salmon index
     extra: ""
