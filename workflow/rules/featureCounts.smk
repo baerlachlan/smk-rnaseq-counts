@@ -2,6 +2,7 @@
 rule featureCounts_s0:
     input:
         samples=expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]),
+        bai=expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]),
         annotation="resources/annotation.gtf",
     output:
         multiext(
@@ -20,6 +21,7 @@ rule featureCounts_s0:
 rule featureCounts_s1:
     input:
         samples=expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]),
+        bai=expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]),
         annotation="resources/annotation.gtf",
     output:
         multiext(
@@ -38,6 +40,7 @@ rule featureCounts_s1:
 rule featureCounts_s2:
     input:
         samples=expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]),
+        bai=expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]),
         annotation="resources/annotation.gtf",
     output:
         multiext(
