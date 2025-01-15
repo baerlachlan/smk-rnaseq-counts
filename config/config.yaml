@@ -27,20 +27,17 @@ featureCounts:
   ## 0: unstranded, 1: stranded, and 2: reversely stranded
   ## Requires a list. Multiple choices can be specified if the strandedness is unknown, producing a featureCounts output for each
   strandedness: [0, 1, 2]
-  ## -J count the number of reads supporting each exon-exon junction
   ## -p indicates the BAM files contain paired-end data, omit this flag for single-end
   ## --countReadPairs count read pairs (fragments) instead of reads. Only required for paired end data. This was introduced in subread v2.0.2
-  ## --fracOverlap minimum fraction of overlapping bases required for read assignment to a feature
-  ## --minOverlap minimum number of overlapping bases required for read assignment to a feature
-  extra: "-p --countReadPairs --fracOverlap 1 --minOverlap 35"
+  extra: "-p --countReadPairs"
 
 ## salmon configuration
 salmon:
-  ## Specify as True to produce gene-level counts
+  ## Specify as True to produce transcript-level counts
   activate: True
   index:
     ## Extra params passed to salmon index
     extra: ""
   quant:
     ## Extra params passed to salmon quant
-    extra: "--numBootstraps 100"
+    extra: "--numBootstraps 50"

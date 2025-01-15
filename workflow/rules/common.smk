@@ -1,7 +1,14 @@
+import sys
 import pandas as pd
 from snakemake.utils import min_version, validate
 
+
 min_version("8.14.0")
+
+
+####
+## Config
+####
 
 
 configfile: "config/config.yaml"
@@ -12,13 +19,15 @@ samples = pd.read_csv(config["samples"], sep="\t", dtype={"sample": str}).set_in
 )
 validate(samples, "../schemas/samples.schema.yml")
 
+
 units = pd.read_csv(
     config["units"], sep="\t", dtype={"sample": str, "unit": str}
 ).set_index(["sample", "unit"], drop=False)
 validate(units, "../schemas/units.schema.yml")
 
+
 ####
-## Helper functions
+## Helper functions and code
 ####
 
 
@@ -30,14 +39,24 @@ def is_paired_end(sample):
     all_single = (~paired).all()
     assert (
         all_single or all_paired
-    ), f"all units for sample {sample} must be single or paired end"
+    ), f"ERROR: All units for sample {sample} must be single or paired end"
     return all_paired
 
 
-if all(is_paired_end(i) for i in samples["sample"]):
+paired_end_samples = [is_paired_end(i) for i in samples["sample"]]
+single_end_samples = [not i for i in paired_end_samples]
+
+
+assert all(paired_end_samples) or all(
+    single_end_samples
+), "ERROR: The dataset must be entirely paired or single end, not a combination."
+
+
+if all(paired_end_samples):
     pair_tags = ["R1", "R2"]
-else:
+elif all(single_end_samples):
     pair_tags = ["R0"]
+
 
 ####
 ## Wildcard constraints
@@ -101,11 +120,11 @@ def align_inputs(wildcards):
             return {
                 "fq1": expand(
                     "results/trim/fastq/{{SAMPLE}}_{UNIT}_R1.fastq.gz",
-                    UNIT=sample_units["unit"]
+                    UNIT=sample_units["unit"],
                 ),
                 "fq2": expand(
                     "results/trim/fastq/{{SAMPLE}}_{UNIT}_R2.fastq.gz",
-                    UNIT=sample_units["unit"]
+                    UNIT=sample_units["unit"],
                 ),
             }
         else:
@@ -118,7 +137,7 @@ def align_inputs(wildcards):
             return {
                 "fq1": expand(
                     "results/trim/fastq/{{SAMPLE}}_{UNIT}_R0.fastq.gz",
-                    UNIT=sample_units["unit"]
+                    UNIT=sample_units["unit"],
                 )
             }
         else:
@@ -263,17 +282,16 @@ def workflow_outputs():
     if len(list(set(units["unit"]))) > 1:
         outputs.extend(["results/merge/fastq/md5.txt"])
 
-
     ## Gene-level counts (featureCounts)
     if config["featureCounts"]["activate"]:
         strandedness_labels = ["unstranded", "stranded", "reverse"]
         for i in config["featureCounts"]["strandedness"]:
-            outputs.append(f"results/featureCounts/{strandedness_labels[i]}/all.featureCounts")
+            outputs.append(
+                f"results/featureCounts/{strandedness_labels[i]}/all.featureCounts"
+            )
 
-
-    ## Transcript-level counts (salmon)
+    ## Transcript-level counts (Salmon)
     if config["salmon"]["activate"]:
         outputs.extend(expand("results/salmon/{SAMPLE}/quant.sf", SAMPLE=samples["sample"]))
-
 
     return outputs

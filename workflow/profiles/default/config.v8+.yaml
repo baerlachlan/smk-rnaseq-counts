@@ -21,6 +21,7 @@ set-threads:
   merge_md5: 8
   ## align
   align: 16
+  align_index: 8
   align_md5: 8
   ## count
   featureCounts_s0: 8
@@ -72,6 +73,9 @@ set-resources:
     runtime: 180
     mem_mb: 65536
     slurm_extra: "'--gres=tmpfs:200G'"  # Needs to be about 5x total input fastq size
+  align_index:
+    runtime: 60
+    mem_mb: 32768
   align_md5:
     runtime: 120
     mem_mb: 1024
