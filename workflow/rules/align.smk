@@ -3,7 +3,7 @@ rule align:
         unpack(align_inputs),
         idx="resources/star",
     output:
-        aln="results/align/bam/{SAMPLE}.bam",
+        aln=temp("results/align/bam/{SAMPLE}.bam"),
         log="results/align/log/{SAMPLE}.log",
         log_final="results/align/log/{SAMPLE}.log.final.out",
     params:

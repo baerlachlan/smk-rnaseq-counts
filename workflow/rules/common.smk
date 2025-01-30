@@ -268,19 +268,28 @@ def workflow_outputs():
                     EXT=["html", "zip"],
                 )
             )
-            ## Align
-            outputs.extend(
-                expand(
-                    "results/align/FastQC/{SAMPLE}_fastqc.{EXT}",
-                    SAMPLE=sample,
-                    EXT=["html", "zip"],
+            if config["align"]["activate"]:
+                ## Align
+                outputs.extend(
+                    expand(
+                        "results/align/FastQC/{SAMPLE}_fastqc.{EXT}",
+                        SAMPLE=sample,
+                        EXT=["html", "zip"],
+                    )
                 )
-            )
 
-    ## md5sums
-    outputs.extend(["results/trim/fastq/md5.txt", "results/align/bam/md5.txt"])
+    ## Trimmed reads
+    outputs.append("results/trim/fastq/md5.txt")
+
+    ## Merged units
     if len(list(set(units["unit"]))) > 1:
-        outputs.extend(["results/merge/fastq/md5.txt"])
+        outputs.append("results/merge/fastq/md5.txt")
+
+    ## Aligned reads
+    if config["align"]["activate"]:
+        outputs.extend(expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
+        outputs.extend(expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
+        outputs.append("results/align/bam/md5.txt")
 
     ## Gene-level counts (featureCounts)
     if config["featureCounts"]["activate"]:

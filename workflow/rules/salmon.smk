@@ -6,7 +6,7 @@ rule salmon_quant:
         quant="results/salmon/{SAMPLE}/quant.sf",
         lib="results/salmon/{SAMPLE}/lib_format_counts.json",
     params:
-        libtype="A",
+        libtype=config["salmon"]["quant"]["extra"],
         extra=config["salmon"]["quant"]["extra"],
     wrapper:
         "v4.0.0/bio/salmon/quant"

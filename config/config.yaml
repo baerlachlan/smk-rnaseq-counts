@@ -19,6 +19,20 @@ read_length: 150
 ## Boolean specifying whether FastQC output is desired
 fastqc: True
 
+## fastp configuration
+trim:
+  ## Single-end
+  extra_se: "--qualified_quality_phred 20 --length_required 35 --trim_poly_g"
+  ## Paired-end
+  extra_pe: "--detect_adapter_for_pe --qualified_quality_phred 20 --length_required 35 --trim_poly_g"
+
+## Alignments
+align:
+  ## Keep alignments when quantifying to the gene-level, or generate alignments when only quantifying to the transcript level
+  ## If set to False and featureCounts (see below) is activated, alignments will be deleted after counting
+  ## Also indexes the alignments
+  activate: True
+
 ## featureCounts configuration
 featureCounts:
   ## Specify as True to produce gene-level counts
@@ -39,5 +53,8 @@ salmon:
     ## Extra params passed to salmon index
     extra: ""
   quant:
+    ## Library type
+    ## "A" allows Salmon to automatically infer the library type
+    libtype: "A"
     ## Extra params passed to salmon quant
-    extra: "--numBootstraps 50"
+    extra: ""

@@ -6,7 +6,7 @@ rule trim_se:
         html="results/trim/log/{SAMPLE}_{UNIT}.html",
         json="results/trim/log/{SAMPLE}_{UNIT}.json",
     params:
-        extra="--qualified_quality_phred 20 --length_required 35 --trim_poly_g",
+        extra=config["trim"]["extra_se"],
     wrapper:
         "v4.0.0/bio/fastp"
 
@@ -24,7 +24,7 @@ rule trim_pe:
         html="results/trim/log/{SAMPLE}_{UNIT}.html",
         json="results/trim/log/{SAMPLE}_{UNIT}.json",
     params:
-        extra="--detect_adapter_for_pe --qualified_quality_phred 20 --length_required 35 --trim_poly_g",
+        extra=config["trim"]["extra_pe"],
     wrapper:
         "v4.0.0/bio/fastp"
 
