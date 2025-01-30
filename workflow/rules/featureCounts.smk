@@ -14,7 +14,7 @@ rule featureCounts_s0:
         strand=0,
         extra=config["featureCounts"]["extra"],
     wrapper:
-        "v4.0.0/bio/subread/featurecounts"
+        "v5.5.2/bio/subread/featurecounts"
 
 
 ## Stranded
@@ -33,7 +33,7 @@ rule featureCounts_s1:
         strand=1,
         extra=config["featureCounts"]["extra"],
     wrapper:
-        "v4.0.0/bio/subread/featurecounts"
+        "v5.5.2/bio/subread/featurecounts"
 
 
 ## Reverse-stranded
@@ -52,4 +52,4 @@ rule featureCounts_s2:
         strand=2,
         extra=config["featureCounts"]["extra"],
     wrapper:
-        "v4.0.0/bio/subread/featurecounts"
+        "v5.5.2/bio/subread/featurecounts"

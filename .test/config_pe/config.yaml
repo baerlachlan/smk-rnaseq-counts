@@ -28,9 +28,7 @@ trim:
 
 ## Alignments
 align:
-  ## Keep alignments when quantifying to the gene-level, or generate alignments when only quantifying to the transcript level
-  ## If set to False and featureCounts (see below) is activated, alignments will be deleted after counting
-  ## Also indexes the alignments
+  ## Generate alignments when only quantifying to the transcript level, and also indices
   activate: True
 
 ## featureCounts configuration

@@ -18,3 +18,4 @@ include: "rules/salmon.smk"
 localrules:
     genome_get,
     annotation_get,
+    transcriptome_get,

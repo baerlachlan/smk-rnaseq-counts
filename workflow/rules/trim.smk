@@ -8,7 +8,7 @@ rule trim_se:
     params:
         extra=config["trim"]["extra_se"],
     wrapper:
-        "v4.0.0/bio/fastp"
+        "v5.5.2/bio/fastp"
 
 
 rule trim_pe:
@@ -26,7 +26,7 @@ rule trim_pe:
     params:
         extra=config["trim"]["extra_pe"],
     wrapper:
-        "v4.0.0/bio/fastp"
+        "v5.5.2/bio/fastp"
 
 
 rule trim_md5:

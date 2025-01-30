@@ -117,5 +117,5 @@ To keep and examine intermediary files, specify the `--notemp` flag.
 ## Test paired-end
 snakemake --configfile .test/config_pe/config.yaml --workflow-profile workflow/profiles/test --notemp
 ## or single-end
-snakemake --configfile .test/config_pe/config.yaml --workflow-profile workflow/profiles/test --notemp
+snakemake --configfile .test/config_se/config.yaml --workflow-profile workflow/profiles/test --notemp
 ```

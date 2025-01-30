@@ -162,14 +162,8 @@ def salmon_inputs(wildcards):
             }
         else:
             return {
-                "r1": expand(
-                    "results/merge/fastq/{SAMPLE}_R1.fastq.gz",
-                    SAMPLE=sample_units["sample"],
-                ),
-                "r2": expand(
-                    "results/merge/fastq/{SAMPLE}_R2.fastq.gz",
-                    SAMPLE=sample_units["sample"],
-                ),
+                "r1": "results/merge/fastq/{SAMPLE}_R1.fastq.gz",
+                "r2": "results/merge/fastq/{SAMPLE}_R2.fastq.gz",
             }
     else:
         if len(sample_units) == 1:
@@ -182,10 +176,7 @@ def salmon_inputs(wildcards):
             }
         else:
             return {
-                "r": expand(
-                    "results/merge/fastq/{SAMPLE}_R0.fastq.gz",
-                    SAMPLE=sample_units["sample"],
-                ),
+                "r": "results/merge/fastq/{SAMPLE}_R0.fastq.gz",
             }
 
 

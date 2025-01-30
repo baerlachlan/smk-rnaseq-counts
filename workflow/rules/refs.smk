@@ -7,7 +7,7 @@ rule genome_get:
         build=config["ref"]["build"],
         release=config["ref"]["release"],
     wrapper:
-        "v4.0.0/bio/reference/ensembl-sequence"
+        "v5.5.2/bio/reference/ensembl-sequence"
 
 
 rule transcriptome_get:
@@ -19,7 +19,7 @@ rule transcriptome_get:
         build=config["ref"]["build"],
         release=config["ref"]["release"],
     wrapper:
-        "v4.0.0/bio/reference/ensembl-sequence"
+        "v5.5.2/bio/reference/ensembl-sequence"
 
 
 rule annotation_get:
@@ -31,7 +31,7 @@ rule annotation_get:
         release=config["ref"]["release"],
         flavor="",
     wrapper:
-        "v4.0.0/bio/reference/ensembl-annotation"
+        "v5.5.2/bio/reference/ensembl-annotation"
 
 
 rule star_index:
@@ -39,12 +39,12 @@ rule star_index:
         fasta="resources/genome.fa",
         gtf="resources/annotation.gtf",
     output:
-        temp(directory("resources/star")),
+        directory("resources/star"),
     params:
         sjdbOverhang=int(config["read_length"]) - 1,
         extra="",
     wrapper:
-        "v4.0.0/bio/star/index"
+        "v5.5.2/bio/star/index"
 
 
 rule salmon_decoy:
@@ -55,7 +55,7 @@ rule salmon_decoy:
         gentrome=temp("resources/gentrome.fa"),
         decoys=temp("resources/decoys.txt"),
     wrapper:
-        "v4.0.0/bio/salmon/decoys"
+        "v5.5.2/bio/salmon/decoys"
 
 
 rule salmon_index:
@@ -85,4 +85,4 @@ rule salmon_index:
     params:
         extra=config["salmon"]["index"]["extra"],
     wrapper:
-        "v4.0.0/bio/salmon/index"
+        "v5.5.2/bio/salmon/index"
