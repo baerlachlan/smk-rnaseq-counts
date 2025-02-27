@@ -16,8 +16,11 @@ ref:
 ## (i.e. for STAR's --sjdbOverhang paramter)
 read_length: 98
 
-## Boolean specifying whether FastQC output is desired
-fastqc: True
+## FastQC configuration
+fastqc:
+  ## Boolean specifying whether FastQC output is desired
+  activate: True
+  extra: "--noextract"
 
 ## fastp configuration
 trim:
@@ -26,10 +29,11 @@ trim:
   ## Paired-end
   extra_pe: "--detect_adapter_for_pe --qualified_quality_phred 20 --length_required 35 --trim_poly_g"
 
-## Alignments
+## STAR configuration
 align:
-  ## Generate alignments when only quantifying to the transcript level, and also indices
-  activate: True
+  ## The align rule is configured to specify STAR's --sjdbOverhang parameter using the read_length defined above
+  ## Specify any further parameters here
+  extra: "--outSAMtype BAM SortedByCoordinate"
 
 ## featureCounts configuration
 featureCounts:
@@ -43,7 +47,7 @@ featureCounts:
   ## --countReadPairs count read pairs (fragments) instead of reads. Only required for paired end data. This was introduced in subread v2.0.2
   extra: "-p --countReadPairs"
 
-## salmon configuration
+## Salmon configuration
 salmon:
   ## Specify as True to produce transcript-level counts
   activate: True

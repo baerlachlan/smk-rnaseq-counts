@@ -27,16 +27,3 @@ rule trim_pe:
         extra=config["trim"]["extra_pe"],
     wrapper:
         "v5.5.2/bio/fastp"
-
-
-rule trim_md5:
-    input:
-        trim_md5_inputs(),
-    output:
-        "results/trim/fastq/md5.txt",
-    conda:
-        "../envs/parallel.yml"
-    shell:
-        """
-        echo "{input}" | tr " " "\n" | parallel -j {threads} md5sum  > {output}
-        """

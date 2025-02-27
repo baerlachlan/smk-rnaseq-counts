@@ -180,49 +180,6 @@ def salmon_inputs(wildcards):
             }
 
 
-def trim_md5_inputs():
-    inputs = []
-    for sample in samples["sample"]:
-        sample_units = units.loc[sample]
-        inputs.extend(
-            expand(
-                "results/trim/fastq/{SAMPLE}_{UNIT}_{PAIRTAG}.fastq.gz",
-                SAMPLE=sample_units["sample"],
-                UNIT=sample_units["unit"],
-                PAIRTAG=pair_tags,
-            )
-        )
-    return inputs
-
-
-def merge_md5_inputs():
-    inputs = []
-    for sample in samples["sample"]:
-        sample_units = units.loc[sample]
-        if len(sample_units) > 1:
-            inputs.extend(
-                expand(
-                    "results/merge/fastq/{SAMPLE}_{PAIRTAG}.fastq.gz",
-                    SAMPLE=sample_units["sample"],
-                    PAIRTAG=pair_tags,
-                )
-            )
-    return inputs
-
-
-def align_md5_inputs():
-    inputs = []
-    for sample in samples["sample"]:
-        sample_units = units.loc[sample]
-        inputs.extend(
-            expand(
-                "results/align/bam/{SAMPLE}.bam",
-                SAMPLE=sample_units["sample"],
-            )
-        )
-    return inputs
-
-
 ####
 ## Workflow output files (Rule all inputs)
 ####
@@ -236,7 +193,7 @@ def workflow_outputs():
     outputs = []
 
     ## FastQC outputs
-    if config["fastqc"]:
+    if config["fastqc"]["activate"]:
         for sample in samples["sample"]:
             sample_units = units.loc[sample]
             ## Raw
@@ -259,28 +216,18 @@ def workflow_outputs():
                     EXT=["html", "zip"],
                 )
             )
-            if config["align"]["activate"]:
-                ## Align
-                outputs.extend(
-                    expand(
-                        "results/align/FastQC/{SAMPLE}_fastqc.{EXT}",
-                        SAMPLE=sample,
-                        EXT=["html", "zip"],
-                    )
+            ## Align
+            outputs.extend(
+                expand(
+                    "results/align/FastQC/{SAMPLE}_fastqc.{EXT}",
+                    SAMPLE=sample,
+                    EXT=["html", "zip"],
                 )
-
-    ## Trimmed reads
-    outputs.append("results/trim/fastq/md5.txt")
-
-    ## Merged units
-    if len(list(set(units["unit"]))) > 1:
-        outputs.append("results/merge/fastq/md5.txt")
+            )
 
     ## Aligned reads
-    if config["align"]["activate"]:
-        outputs.extend(expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
-        outputs.extend(expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
-        outputs.append("results/align/bam/md5.txt")
+    outputs.extend(expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
+    outputs.extend(expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
 
     ## Gene-level counts (featureCounts)
     if config["featureCounts"]["activate"]:

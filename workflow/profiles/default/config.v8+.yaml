@@ -15,14 +15,11 @@ set-threads:
   ## trim
   trim_se: 4
   trim_pe: 4
-  trim_md5: 8
   ## merge
   merge: 1
-  merge_md5: 8
   ## align
   align: 16
   align_index: 8
-  align_md5: 8
   ## count
   featureCounts_s0: 8
   featureCounts_s1: 8
@@ -58,16 +55,10 @@ set-resources:
   trim_pe:
     runtime: 60
     mem_mb: 8192
-  trim_md5:
-    runtime: 60
-    mem_mb: 1024
   ## merge
   merge:
     runtime: 30
     mem_mb: 8192
-  merge_md5:
-    runtime: 60
-    mem_mb: 1024
   ## align
   align:
     runtime: 180
@@ -76,9 +67,6 @@ set-resources:
   align_index:
     runtime: 60
     mem_mb: 32768
-  align_md5:
-    runtime: 120
-    mem_mb: 1024
   ## count
   featureCounts_s0:
     runtime: 240
