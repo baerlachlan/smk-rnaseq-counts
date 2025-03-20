@@ -31,56 +31,56 @@ set-resources:
   ## refs
   star_index:
     runtime: 90
-    mem_mb: 65536
+    mem: 64G
   salmon_decoy:
     runtime: 30
-    mem_mb: 4096
+    mem: 4G
   salmon_index:
     runtime: 60
-    mem_mb: 32768
+    mem: 32G
   ## fastqc
   fastqc_raw:
     runtime: 60
-    mem_mb: 2048
+    mem: 2G
   fastqc_trim:
     runtime: 60
-    mem_mb: 2048
+    mem: 2G
   fastqc_align:
     runtime: 60
-    mem_mb: 2048
+    mem: 2G
   ## trim
   trim_se:
     runtime: 60
-    mem_mb: 8192
+    mem: 8G
   trim_pe:
     runtime: 60
-    mem_mb: 8192
+    mem: 8G
   ## merge
   merge:
     runtime: 30
-    mem_mb: 8192
+    mem: 8G
   ## align
   align:
     runtime: 180
-    mem_mb: 65536
+    mem: 64G
     slurm_extra: "'--gres=tmpfs:200G'"  # Needs to be about 5x total input fastq size
   align_index:
     runtime: 60
-    mem_mb: 32768
+    mem: 32G
   ## count
   featureCounts_s0:
     runtime: 240
-    mem_mb: 8192
+    mem: 8G
     slurm_extra: "'--gres=tmpfs:50G'"
   featureCounts_s1:
     runtime: 240
-    mem_mb: 8192
+    mem: 8G
     slurm_extra: "'--gres=tmpfs:50G'"
   featureCounts_s2:
     runtime: 240
-    mem_mb: 8192
+    mem: 8G
     slurm_extra: "'--gres=tmpfs:50G'"
   ## salmon
   salmon_quant:
     runtime: 180
-    mem_mb: 32768
+    mem: 32G
