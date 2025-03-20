@@ -1,4 +1,4 @@
 sample	unit	fq1	fq2
-S01	1	results/raw_data/fastq/sample1_unit1_R1.fastq.gz	results/raw_data/fastq/sample1_unit1_R2.fastq.gz
-S01	2	results/raw_data/fastq/sample1_unit2_R1.fastq.gz	results/raw_data/fastq/sample1_unit2_R2.fastq.gz
-S02	1	results/raw_data/fastq/sample2_unit1_R1.fastq.gz	results/raw_data/fastq/sample2_unit1_R2.fastq.gz
+S01	1	sample1_unit1_R1.fastq.gz	sample1_unit1_R2.fastq.gz
+S01	2	sample1_unit2_R1.fastq.gz	sample1_unit2_R2.fastq.gz
+S02	1	sample2_unit1_R1.fastq.gz	sample2_unit1_R2.fastq.gz

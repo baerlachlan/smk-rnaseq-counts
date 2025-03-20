@@ -3,11 +3,13 @@ rule align:
         unpack(align_inputs),
         idx="resources/star",
     output:
-        aln="results/align/bam/{SAMPLE}.bam",
+        aln="results/align/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/align/bam/{SAMPLE}.bam"),
         log="results/align/log/{SAMPLE}.log",
         log_final="results/align/log/{SAMPLE}.log.final.out",
     params:
         extra=f"--sjdbOverhang {int(config["read_length"])-1} {config["align"]["extra"]}",
+    resources:
+        slurm_extra=lambda wc, input: f"'--gres=tmpfs:{math.ceil((input.size_mb / 1024) * 5)}G'"
     wrapper:
         "v5.5.2/bio/star/align"
 

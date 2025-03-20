@@ -3,6 +3,9 @@ samples: "config/samples.tsv"
 ## Path to TSV file containing sequencing unit information (required columns: sample, unit, fq1, fq2)
 units: "config/units.tsv"
 
+## Path to raw data specified in units.tsv
+data_dir: "../raw_data"
+
 ref:
   ## Ensembl species name
   species: homo_sapiens
@@ -31,6 +34,8 @@ trim:
 
 ## STAR configuration
 align:
+  ## Keep BAM files or automatically delete them
+  keep_bam: True
   ## The align rule is configured to specify STAR's --sjdbOverhang parameter using the read_length defined above
   ## Specify any further parameters here
   extra: "--outSAMtype BAM SortedByCoordinate"

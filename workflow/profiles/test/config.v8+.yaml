@@ -31,52 +31,52 @@ set-resources:
   ## refs
   star_index:
     runtime: 30
-    mem_mb: 32768
+    mem: 32G
   salmon_decoy:
     runtime: 30
-    mem_mb: 4096
+    mem: 4G
   salmon_index:
     runtime: 60
-    mem_mb: 32768
+    mem: 32G
   ## fastqc
   fastqc_raw:
     runtime: 10
-    mem_mb: 1024
+    mem: 1G
   fastqc_trim:
     runtime: 10
-    mem_mb: 1024
+    mem: 1G
   fastqc_align:
     runtime: 10
-    mem_mb: 1024
+    mem: 1G
   ## trim
   trim_se:
     runtime: 10
-    mem_mb: 2048
+    mem: 2G
   trim_pe:
     runtime: 10
-    mem_mb: 2048
+    mem: 2G
   ## merge
   merge:
     runtime: 30
-    mem_mb: 4096
+    mem: 4G
   ## align
   align:
     runtime: 10
-    mem_mb: 32768
+    mem: 32G
   align_index:
     runtime: 60
-    mem_mb: 32768
+    mem: 32G
   ## count
   featureCounts_s0:
     runtime: 30
-    mem_mb: 4096
+    mem: 4G
   featureCounts_s1:
     runtime: 30
-    mem_mb: 4096
+    mem: 4G
   featureCounts_s2:
     runtime: 30
-    mem_mb: 4096
+    mem: 4G
   ## salmon
   salmon_quant:
     runtime: 30
-    mem_mb: 32768
+    mem: 32G

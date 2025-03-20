@@ -13,6 +13,8 @@ rule featureCounts_s0:
     params:
         strand=0,
         extra=config["featureCounts"]["extra"],
+    resources:
+        slurm_extra=lambda wc, input: f"'--gres=tmpfs:{math.ceil((input.size_mb / 1024) * 2)}G'"
     wrapper:
         "v5.5.2/bio/subread/featurecounts"
 
@@ -32,6 +34,8 @@ rule featureCounts_s1:
     params:
         strand=1,
         extra=config["featureCounts"]["extra"],
+    resources:
+        slurm_extra=lambda wc, input: f"'--gres=tmpfs:{math.ceil((input.size_mb / 1024) * 2)}G'"
     wrapper:
         "v5.5.2/bio/subread/featurecounts"
 
@@ -51,5 +55,7 @@ rule featureCounts_s2:
     params:
         strand=2,
         extra=config["featureCounts"]["extra"],
+    resources:
+        slurm_extra=lambda wc, input: f"'--gres=tmpfs:{math.ceil((input.size_mb / 1024) * 2)}G'"
     wrapper:
         "v5.5.2/bio/subread/featurecounts"

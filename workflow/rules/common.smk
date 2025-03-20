@@ -1,5 +1,7 @@
 import sys
 import pandas as pd
+import os
+import math
 from snakemake.utils import min_version, validate
 
 
@@ -78,11 +80,11 @@ def fastqc_raw_inputs(wildcards):
     unit = units.loc[wildcards.SAMPLE, wildcards.UNIT]
     if is_paired_end(wildcards.SAMPLE):
         if wildcards.PAIRTAG == pair_tags[0]:
-            return f"{unit.fq1}"
+            return os.path.join(config["data_dir"], f"{unit.fq1}")
         elif wildcards.PAIRTAG == pair_tags[1]:
-            return f"{unit.fq2}"
+            return os.path.join(config["data_dir"], f"{unit.fq2}")
     else:
-        return f"{unit.fq1}"
+        return os.path.join(config["data_dir"], f"{unit.fq1}")
 
 
 def fastqc_trim_inputs(wildcards):
@@ -98,9 +100,9 @@ def fastqc_trim_inputs(wildcards):
 def trim_inputs(wildcards):
     unit = units.loc[wildcards.SAMPLE, wildcards.UNIT]
     if is_paired_end(wildcards.SAMPLE):
-        return {"sample": [f"{unit.fq1}", f"{unit.fq2}"]}
+        return {"sample": [os.path.join(config["data_dir"], f"{unit.fq1}"), os.path.join(config["data_dir"], f"{unit.fq2}")]}
     else:
-        return {"sample": [f"{unit.fq1}"]}
+        return {"sample": [os.path.join(config["data_dir"], f"{unit.fq1}")]}
 
 
 def merge_inputs(wildcards):
