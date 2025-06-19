@@ -11,6 +11,7 @@ include: "rules/fastqc.smk"
 include: "rules/trim.smk"
 include: "rules/merge.smk"
 include: "rules/align.smk"
+include: "rules/deduplicate.smk"
 include: "rules/featureCounts.smk"
 include: "rules/salmon.smk"
 

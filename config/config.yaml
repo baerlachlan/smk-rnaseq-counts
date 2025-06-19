@@ -40,6 +40,13 @@ align:
   ## Specify any further parameters here
   extra: "--outSAMtype BAM SortedByCoordinate"
 
+## UMI-tools configuration
+deduplicate:
+  ## Boolean to specify whether alignments should be deduplicated by UMI and position
+  activate: True
+  ## Extra params passed to UMI-tools
+  extra: "--paired --umi-separator=:"
+
 ## featureCounts configuration
 featureCounts:
   ## Specify as True to produce gene-level counts

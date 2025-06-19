@@ -146,6 +146,32 @@ def align_inputs(wildcards):
             return {"fq1": "results/merge/fastq/{SAMPLE}_R0.fastq.gz"}
 
 
+def featureCounts_inputs(wildcards):
+    if config["deduplicate"]["activate"]:
+        return {
+            "samples": expand(
+                "results/deduplicate/bam/{SAMPLE}.bam",
+                SAMPLE=samples["sample"]
+            ),
+            "bai": expand(
+                "results/deduplicate/bam/{SAMPLE}.bam.bai",
+                SAMPLE=samples["sample"]
+            )
+        }
+    else:
+        return {
+            "samples": expand(
+                "results/align/bam/{SAMPLE}.bam",
+                SAMPLE=samples["sample"]
+            ),
+            "bai": expand(
+                "results/align/bam/{SAMPLE}.bam.bai",
+                SAMPLE=samples["sample"]
+            )
+        }
+
+
+
 def salmon_inputs(wildcards):
     sample_units = units.loc[wildcards.SAMPLE]
     if is_paired_end(wildcards.SAMPLE):

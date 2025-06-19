@@ -63,6 +63,7 @@ set-resources:
   align:
     runtime: 180
     mem: 64G
+    slurm_extra: "'--gres=tmpfs:100G'"
   align_index:
     runtime: 60
     mem: 32G
@@ -70,12 +71,15 @@ set-resources:
   featureCounts_s0:
     runtime: 240
     mem: 8G
+    slurm_extra: "'--gres=tmpfs:50G'"
   featureCounts_s1:
     runtime: 240
     mem: 8G
+    slurm_extra: "'--gres=tmpfs:50G'"
   featureCounts_s2:
     runtime: 240
     mem: 8G
+    slurm_extra: "'--gres=tmpfs:50G'"
   ## salmon
   salmon_quant:
     runtime: 180

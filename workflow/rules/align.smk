@@ -8,8 +8,6 @@ rule align:
         log_final="results/align/log/{SAMPLE}.log.final.out",
     params:
         extra=f"--sjdbOverhang {int(config["read_length"])-1} {config["align"]["extra"]}",
-    resources:
-        slurm_extra=lambda wc, input: f"'--gres=tmpfs:{math.ceil((input.size_mb / 1024) * 5)}G'"
     wrapper:
         "v5.5.2/bio/star/align"
 
