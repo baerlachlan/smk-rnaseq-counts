@@ -39,14 +39,24 @@ Module: [`merge.smk`](workflow/rules/merge.smk)
 
 ### 4. Align
 
-Aligment to the genome is performed with `STAR` in 2-pass mode.
+Aligment to the genome is performed with `STAR`.
 
 Module: [`align.smk`](workflow/rules/align.smk)
 
 - Input: `results/trim` and/or `results/merge` (`FASTQ`)
 - Output: `results/align` (`BAM`)
 
-### 5. Gene-level counts
+### 5. Deduplicate (optional)
+
+Deduplication using Unique Molecular Identifiers (UMIs) and mapping position is performed with `UMI-tools`.
+This is currently only available for gene-level counts with `featureCounts`.
+
+Module: [`deduplicate.smk`](workflow/rules/deduplicate.smk)
+
+- Input: `results/align` (`BAM`)
+- Output: `results/deduplicate` (`BAM`)
+
+### 6. Gene-level counts (optional)
 
 Summarisation of read counts to the gene-level is performed with `featureCounts`.
 
@@ -56,7 +66,7 @@ Module: [`featureCounts.smk`](workflow/rules/featureCounts.smk)
 - Output: `results/featureCounts` (`TSV`)
   - NOTE: by default, the workflow will run featurecounts on all samples 3 times. It will produce 3 folders as subdirectories of `results/featureCounts`: `unstranded`, `stranded` and `reverse`. This is for the purpose of inferring strandedness from the count summary stats. If the strandedness of the library is already known, this can be specified in [`config/config.yaml`](config/config.yaml), and only a single subdirectory will be produced.
 
-### 6. Transcript-level counts
+### 7. Transcript-level counts (optional)
 
 Summarisation of read counts to the transcript-level is performed with `Salmon`.
 
@@ -67,7 +77,7 @@ Module: [`salmon.smk`](workflow/rules/salmon.smk)
 
 ### Other features
 
-#### Quality control
+#### Quality control (optional)
 
 Quality reports are produced with `FastQC` for raw, trimmed and aligned data.
 
