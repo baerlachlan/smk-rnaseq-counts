@@ -15,7 +15,7 @@ This Snakemake workflow implements the pre-processing steps to estimate gene- an
 
 Raw RNA-seq data is expected in `FASTQ` format.
 No specific location is required for the raw data.
-This is left flexible for the user, however the chosen location must be specified in [`config/units.tsv`](config/units.tsv).
+This is left flexible for the user, however the chosen location must be specified in [`config/config.yaml`](config/config.yaml).
 
 ### 2. Trim
 
@@ -62,7 +62,7 @@ Summarisation of read counts to the gene-level is performed with `featureCounts`
 
 Module: [`featureCounts.smk`](workflow/rules/featureCounts.smk)
 
-- Input: `results/align` (`BAM`)
+- Input: `results/align` or `results/deduplicate` (`BAM`)
 - Output: `results/featureCounts` (`TSV`)
   - NOTE: by default, the workflow will run featurecounts on all samples 3 times. It will produce 3 folders as subdirectories of `results/featureCounts`: `unstranded`, `stranded` and `reverse`. This is for the purpose of inferring strandedness from the count summary stats. If the strandedness of the library is already known, this can be specified in [`config/config.yaml`](config/config.yaml), and only a single subdirectory will be produced.
 

@@ -43,7 +43,7 @@ align:
 ## UMI-tools configuration
 deduplicate:
   ## Boolean to specify whether alignments should be deduplicated by UMI and position
-  activate: True
+  activate: False
   ## Extra params passed to UMI-tools
   extra: "--paired --umi-separator=:"
 

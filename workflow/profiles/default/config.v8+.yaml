@@ -20,6 +20,9 @@ set-threads:
   ## align
   align: 16
   align_index: 8
+  ## deduplicate
+  deduplicate: 1
+  deduplicate_index: 8
   ## count
   featureCounts_s0: 8
   featureCounts_s1: 8
@@ -65,6 +68,13 @@ set-resources:
     mem: 64G
     slurm_extra: "'--gres=tmpfs:100G'"
   align_index:
+    runtime: 60
+    mem: 32G
+  ## deduplicate
+  deduplicate:
+    runtime: 60
+    mem: 8G
+  deduplicate_index:
     runtime: 60
     mem: 32G
   ## count
