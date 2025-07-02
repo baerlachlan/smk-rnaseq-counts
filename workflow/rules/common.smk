@@ -33,6 +33,20 @@ validate(units, "../schemas/units.schema.yml")
 ####
 
 
+species = config["ref"]["species"]
+build = config["ref"]["build"]
+release = config["ref"]["release"]
+
+
+genome_fa = f"resources/{species.capitalize()}.{build}.dna.primary_assembly.fa"
+transcriptome_fa = f"resources/{species.capitalize()}.{build}.cdna.all.fa"
+annotation_gtf = f"resources/{species.capitalize()}.{build}.{str(release)}.gtf"
+star_index_dir = "resources/star_index/"
+gentrome_fa = f"resources/{species.capitalize()}.{build}.gentrome.fa"
+decoys_txt = f"resources/{species.capitalize()}.{build}.decoys.txt"
+salmon_index_dir = "resources/salmon_index/"
+
+
 def is_paired_end(sample):
     sample_units = units.loc[sample]
     fq2_null = sample_units["fq2"].isnull()

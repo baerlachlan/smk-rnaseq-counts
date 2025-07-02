@@ -1,6 +1,6 @@
 rule genome_get:
     output:
-        "resources/genome.fa",
+        genome_fa,
     params:
         species=config["ref"]["species"],
         datatype="dna",
@@ -12,7 +12,7 @@ rule genome_get:
 
 rule transcriptome_get:
     output:
-        "resources/transcriptome.fa",
+        transcriptome_fa,
     params:
         species=config["ref"]["species"],
         datatype="cdna",
@@ -24,7 +24,7 @@ rule transcriptome_get:
 
 rule annotation_get:
     output:
-        "resources/annotation.gtf",
+        annotation_gtf,
     params:
         species=config["ref"]["species"],
         build=config["ref"]["build"],
@@ -36,10 +36,10 @@ rule annotation_get:
 
 rule star_index:
     input:
-        fasta="resources/genome.fa",
-        gtf="resources/annotation.gtf",
+        fasta=genome_fa,
+        gtf=annotation_gtf,
     output:
-        directory("resources/star"),
+        directory(star_index_dir),
     params:
         sjdbOverhang=int(config["read_length"]) - 1,
         extra="",
@@ -49,22 +49,22 @@ rule star_index:
 
 rule salmon_decoy:
     input:
-        transcriptome="resources/transcriptome.fa",
-        genome="resources/genome.fa",
+        transcriptome=transcriptome_fa,
+        genome=genome_fa,
     output:
-        gentrome=temp("resources/gentrome.fa"),
-        decoys=temp("resources/decoys.txt"),
+        gentrome=temp(gentrome_fa),
+        decoys=temp(decoys_txt),
     wrapper:
         "v5.5.2/bio/salmon/decoys"
 
 
 rule salmon_index:
     input:
-        sequences="resources/gentrome.fa",
-        decoys="resources/decoys.txt",
+        sequences=gentrome_fa,
+        decoys=decoys_txt,
     output:
         multiext(
-            "resources/salmon_index/",
+            salmon_index_dir,
             "complete_ref_lens.bin",
             "ctable.bin",
             "ctg_offsets.bin",
@@ -81,7 +81,7 @@ rule salmon_index:
             "seq.bin",
             "versionInfo.json",
         ),
-        directory("resources/salmon_index/"),  # Added for dependency
+        directory(salmon_index_dir),  # Added for dependency
     params:
         extra=config["salmon"]["index"]["extra"],
     wrapper:

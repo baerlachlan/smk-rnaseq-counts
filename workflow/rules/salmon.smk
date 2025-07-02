@@ -1,7 +1,7 @@
 rule salmon_quant:
     input:
         unpack(salmon_inputs),
-        index="resources/salmon_index/",
+        index=salmon_index_dir,
     output:
         quant="results/salmon/{SAMPLE}/quant.sf",
         lib="results/salmon/{SAMPLE}/lib_format_counts.json",

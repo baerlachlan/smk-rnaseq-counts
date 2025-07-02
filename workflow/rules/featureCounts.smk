@@ -2,7 +2,7 @@
 rule featureCounts_s0:
     input:
         unpack(featureCounts_inputs),
-        annotation="resources/annotation.gtf",
+        annotation=annotation_gtf,
     output:
         multiext(
             "results/featureCounts/unstranded/all",
@@ -20,7 +20,7 @@ rule featureCounts_s0:
 rule featureCounts_s1:
     input:
         unpack(featureCounts_inputs),
-        annotation="resources/annotation.gtf",
+        annotation=annotation_gtf,
     output:
         multiext(
             "results/featureCounts/stranded/all",
@@ -38,7 +38,7 @@ rule featureCounts_s1:
 rule featureCounts_s2:
     input:
         unpack(featureCounts_inputs),
-        annotation="resources/annotation.gtf",
+        annotation=annotation_gtf,
     output:
         multiext(
             "results/featureCounts/reverse/all",

@@ -1,7 +1,7 @@
 rule align:
     input:
         unpack(align_inputs),
-        idx="resources/star",
+        idx=star_index_dir,
     output:
         aln="results/align/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/align/bam/{SAMPLE}.bam"),
         log="results/align/log/{SAMPLE}.log",
