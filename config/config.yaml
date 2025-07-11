@@ -1,3 +1,11 @@
+######
+## COMMON CONFIG
+######
+## Edit the following configuration for a typical, minimal(-ish), RNA-seq
+## analysis
+## This involves QC, trimming, aligning, and quantification to the gene- and
+## transcript-level
+
 ## Path to TSV file containing sample information (required columns: sample)
 samples: "config/samples.tsv"
 ## Path to TSV file containing sequencing unit information (required columns: sample, unit, fq1, fq2)
@@ -27,10 +35,8 @@ fastqc:
 
 ## fastp configuration
 trim:
-  ## Single-end
-  extra_se: "--qualified_quality_phred 20 --length_required 35 --trim_poly_g"
-  ## Paired-end
-  extra_pe: "--detect_adapter_for_pe --qualified_quality_phred 20 --length_required 35 --trim_poly_g"
+  ## Exclude `--detect_adapter_for_pe` for single-end
+  extra: "--detect_adapter_for_pe --qualified_quality_phred 20 --length_required 35 --trim_poly_g"
 
 ## STAR configuration
 align:
@@ -39,13 +45,6 @@ align:
   ## The align rule is configured to specify STAR's --sjdbOverhang parameter using the read_length defined above
   ## Specify any further parameters here
   extra: "--outSAMtype BAM SortedByCoordinate"
-
-## UMI-tools configuration
-deduplicate:
-  ## Boolean to specify whether alignments should be deduplicated by UMI and position
-  activate: False
-  ## Extra params passed to UMI-tools
-  extra: "--paired --umi-separator=:"
 
 ## featureCounts configuration
 featureCounts:
@@ -57,6 +56,7 @@ featureCounts:
   strandedness: [0, 1, 2]
   ## -p indicates the BAM files contain paired-end data, omit this flag for single-end
   ## --countReadPairs count read pairs (fragments) instead of reads. Only required for paired end data. This was introduced in subread v2.0.2
+  ## Exclude `-p --countReadPairs` for single-end
   extra: "-p --countReadPairs"
 
 ## Salmon configuration
@@ -72,3 +72,32 @@ salmon:
     libtype: "A"
     ## Extra params passed to salmon quant
     extra: ""
+
+######
+## OPTIONAL CONFIG
+######
+## The configuration options here are deactivated by default
+## Activate these if you require additional QC, deeper analysis, or niche
+## processing of your data
+
+## UMI-tools configuration
+deduplicate:
+  ## Boolean to specify whether alignments should be deduplicated by UMI and position
+  activate: False
+  ## Extra params passed to UMI-tools
+  ## Exclude `--paired` for single-end
+  extra: "--paired --umi-separator=:"
+
+## RSeQC configuration
+read_distribution:
+  activate: False
+inner_distance:
+  activate: False
+
+## rRNA detection
+rrna:
+  activate: False
+
+## Genome coverage
+coverage:
+  activate: False

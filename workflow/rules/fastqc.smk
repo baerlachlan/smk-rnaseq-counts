@@ -7,7 +7,7 @@ rule fastqc_raw:
     params:
         extra=config["fastqc"]["extra"],
     wrapper:
-        "v5.5.2/bio/fastqc"
+        "v7.2.0/bio/fastqc"
 
 
 rule fastqc_trim:
@@ -19,7 +19,7 @@ rule fastqc_trim:
     params:
         extra=config["fastqc"]["extra"],
     wrapper:
-        "v5.5.2/bio/fastqc"
+        "v7.2.0/bio/fastqc"
 
 
 rule fastqc_align:
@@ -31,4 +31,4 @@ rule fastqc_align:
     params:
         extra=config["fastqc"]["extra"],
     wrapper:
-        "v5.5.2/bio/fastqc"
+        "v7.2.0/bio/fastqc"

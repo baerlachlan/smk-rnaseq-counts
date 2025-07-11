@@ -15,10 +15,11 @@ rule deduplicate:
         --log={output.log} {params.extra}
         """
 
+
 rule deduplicate_index:
     input:
         "results/deduplicate/bam/{SAMPLE}.bam",
     output:
         "results/deduplicate/bam/{SAMPLE}.bam.bai",
     wrapper:
-        "v5.5.2/bio/samtools/index"
+        "v7.2.0/bio/samtools/index"

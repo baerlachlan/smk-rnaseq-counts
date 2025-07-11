@@ -41,6 +41,8 @@ release = config["ref"]["release"]
 genome_fa = f"resources/{species.capitalize()}.{build}.dna.primary_assembly.fa"
 transcriptome_fa = f"resources/{species.capitalize()}.{build}.cdna.all.fa"
 annotation_gtf = f"resources/{species.capitalize()}.{build}.{str(release)}.gtf"
+annotation_genePred = f"resources/{species.capitalize()}.{build}.{str(release)}.genePred"
+annotation_bed = f"resources/{species.capitalize()}.{build}.{str(release)}.bed"
 star_index_dir = "resources/star_index/"
 gentrome_fa = f"resources/{species.capitalize()}.{build}.gentrome.fa"
 decoys_txt = f"resources/{species.capitalize()}.{build}.decoys.txt"
@@ -185,7 +187,6 @@ def featureCounts_inputs(wildcards):
         }
 
 
-
 def salmon_inputs(wildcards):
     sample_units = units.loc[wildcards.SAMPLE]
     if is_paired_end(wildcards.SAMPLE):
@@ -220,6 +221,17 @@ def salmon_inputs(wildcards):
             return {
                 "r": "results/merge/fastq/{SAMPLE}_R0.fastq.gz",
             }
+
+
+## TODO: Some rules also require BAM files, so extend those rules to use this
+## function
+## Problem is some rules (e.g. featureCounts) require all files as a list,
+## while some require the wildcard - sort this out eventually
+def bam_inputs():
+    if config["deduplicate"]["activate"]:
+        return "results/deduplicate/bam/{SAMPLE}.bam"
+    else:
+        return "results/align/bam/{SAMPLE}.bam"
 
 
 ####
@@ -282,5 +294,26 @@ def workflow_outputs():
     ## Transcript-level counts (Salmon)
     if config["salmon"]["activate"]:
         outputs.extend(expand("results/salmon/{SAMPLE}/quant.sf", SAMPLE=samples["sample"]))
+
+    ## RSeQC
+    ## read_distribution
+    if config["read_distribution"]["activate"]:
+        outputs.extend(expand(
+            "results/rseqc/read_distribution/{SAMPLE}.read_distribution.txt",
+            SAMPLE=samples["sample"]
+        ))
+    if config["inner_distance"]["activate"]:
+        outputs.extend(expand(
+            "results/rseqc/inner_distance/{SAMPLE}.inner_distance.txt",
+            SAMPLE=samples["sample"]
+        ))
+
+    ## rDNA alignments
+    if config["rrna"]["activate"]:
+        outputs.extend(expand("results/rrna/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
+
+    ## Genome coverage
+    if config["coverage"]["activate"]:
+        outputs.extend(expand("results/coverage/{SAMPLE}.bedGraph", SAMPLE=samples["sample"]))
 
     return outputs

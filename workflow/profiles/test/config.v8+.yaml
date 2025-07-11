@@ -5,6 +5,8 @@ set-threads:
   ## refs
   genome_get: 1
   annotation_get: 1
+  annotation_genePred: 1
+  annotation_bed: 1
   star_index: 8
   salmon_decoy: 2
   salmon_index: 4
@@ -29,9 +31,27 @@ set-threads:
   featureCounts_s2: 4
   ## salmon
   salmon_quant: 4
+  ## read_distribution
+  read_distribution: 1
+  ## read_gc
+  read_gc: 1
+  ## inner_distance:
+  inner_distance: 1
+  ## rrna
+  rrna_get: 1
+  rrna_index: 1
+  rrna_align: 1
+  ## coverage
+  genome_coverage: 2
 
 set-resources:
   ## refs
+  annotation_genePred:
+    runtime: 30
+    mem: 4G
+  annotation_bed:
+    runtime: 30
+    mem: 4G
   star_index:
     runtime: 30
     mem: 32G
@@ -90,3 +110,29 @@ set-resources:
   salmon_quant:
     runtime: 30
     mem: 32G
+  ## read_distribution
+  read_distribution:
+    runtime: 60
+    mem: 8G
+  ## read_gc
+  read_gc:
+    runtime: 60
+    mem: 8G
+  ## inner_distance
+  inner_distance:
+    runtime: 60
+    mem: 8G
+  ## rrna
+  rrna_get:
+    runtime: 10
+    mem: 2G
+  rrna_index:
+    runtime: 10
+    mem: 4G
+  rrna_align:
+    runtime: 30
+    mem: 8G
+  ## coverage:
+  genome_coverage:
+    runtime: 30
+    mem: 8G

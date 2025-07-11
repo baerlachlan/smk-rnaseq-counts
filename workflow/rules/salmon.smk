@@ -9,4 +9,4 @@ rule salmon_quant:
         libtype=config["salmon"]["quant"]["libtype"],
         extra=config["salmon"]["quant"]["extra"],
     wrapper:
-        "v5.5.2/bio/salmon/quant"
+        "v7.2.0/bio/salmon/quant"

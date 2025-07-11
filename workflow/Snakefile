@@ -6,17 +6,23 @@ rule all:
         workflow_outputs(),
 
 
+## Common
 include: "rules/refs.smk"
 include: "rules/fastqc.smk"
 include: "rules/trim.smk"
 include: "rules/merge.smk"
 include: "rules/align.smk"
-include: "rules/deduplicate.smk"
 include: "rules/featureCounts.smk"
 include: "rules/salmon.smk"
 
+## Optional
+include: "rules/deduplicate.smk"
+include: "rules/rseqc.smk"
+include: "rules/rrna.smk"
+include: "rules/coverage.smk"
 
 localrules:
     genome_get,
     annotation_get,
     transcriptome_get,
+    rrna_get,

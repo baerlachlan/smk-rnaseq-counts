@@ -7,7 +7,7 @@ rule genome_get:
         build=config["ref"]["build"],
         release=config["ref"]["release"],
     wrapper:
-        "v5.5.2/bio/reference/ensembl-sequence"
+        "v7.2.0/bio/reference/ensembl-sequence"
 
 
 rule transcriptome_get:
@@ -19,7 +19,7 @@ rule transcriptome_get:
         build=config["ref"]["build"],
         release=config["ref"]["release"],
     wrapper:
-        "v5.5.2/bio/reference/ensembl-sequence"
+        "v7.2.0/bio/reference/ensembl-sequence"
 
 
 rule annotation_get:
@@ -31,7 +31,7 @@ rule annotation_get:
         release=config["ref"]["release"],
         flavor="",
     wrapper:
-        "v5.5.2/bio/reference/ensembl-annotation"
+        "v7.2.0/bio/reference/ensembl-annotation"
 
 
 rule star_index:
@@ -44,7 +44,7 @@ rule star_index:
         sjdbOverhang=int(config["read_length"]) - 1,
         extra="",
     wrapper:
-        "v5.5.2/bio/star/index"
+        "v7.2.0/bio/star/index"
 
 
 rule salmon_decoy:
@@ -55,7 +55,7 @@ rule salmon_decoy:
         gentrome=temp(gentrome_fa),
         decoys=temp(decoys_txt),
     wrapper:
-        "v5.5.2/bio/salmon/decoys"
+        "v7.2.0/bio/salmon/decoys"
 
 
 rule salmon_index:
@@ -85,4 +85,25 @@ rule salmon_index:
     params:
         extra=config["salmon"]["index"]["extra"],
     wrapper:
-        "v5.5.2/bio/salmon/index"
+        "v7.2.0/bio/salmon/index"
+
+rule annotation_genePred:
+    input:
+        annotation_gtf,
+    output:
+        temp(annotation_genePred),
+    params:
+        extra="-genePredExt",
+    wrapper:
+        "v7.2.0/bio/ucsc/gtfToGenePred"
+
+
+rule annotation_bed:
+    input:
+        annotation_genePred
+    output:
+        temp(annotation_bed)
+    params:
+        extra="",
+    wrapper:
+        "v7.2.0/bio/ucsc/genePredToBed"

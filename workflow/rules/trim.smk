@@ -6,9 +6,9 @@ rule trim_se:
         html="results/trim/log/{SAMPLE}_{UNIT}.html",
         json="results/trim/log/{SAMPLE}_{UNIT}.json",
     params:
-        extra=config["trim"]["extra_se"],
+        extra=config["trim"]["extra"],
     wrapper:
-        "v5.5.2/bio/fastp"
+        "v7.2.0/bio/fastp"
 
 
 rule trim_pe:
@@ -24,6 +24,6 @@ rule trim_pe:
         html="results/trim/log/{SAMPLE}_{UNIT}.html",
         json="results/trim/log/{SAMPLE}_{UNIT}.json",
     params:
-        extra=config["trim"]["extra_pe"],
+        extra=config["trim"]["extra"],
     wrapper:
-        "v5.5.2/bio/fastp"
+        "v7.2.0/bio/fastp"

@@ -9,7 +9,7 @@ rule align:
     params:
         extra=f"--sjdbOverhang {int(config["read_length"])-1} {config["align"]["extra"]}",
     wrapper:
-        "v5.5.2/bio/star/align"
+        "v7.2.0/bio/star/align"
 
 
 rule align_index:
@@ -18,4 +18,4 @@ rule align_index:
     output:
         "results/align/bam/{SAMPLE}.bam.bai",
     wrapper:
-        "v5.5.2/bio/samtools/index"
+        "v7.2.0/bio/samtools/index"
