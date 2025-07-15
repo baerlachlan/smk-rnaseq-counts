@@ -1,9 +1,9 @@
 rule deduplicate:
     input:
-        bam="results/align/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/align/bam/{SAMPLE}.bam"),
+        bam="results/align/bam/{SAMPLE}.bam",
         bai="results/align/bam/{SAMPLE}.bam.bai",
     output:
-        bam="results/deduplicate/bam/{SAMPLE}.bam",
+        bam="results/deduplicate/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/deduplicate/bam/{SAMPLE}.bam"),
         log="results/deduplicate/log/{SAMPLE}.log",
     params:
         extra=config["deduplicate"]["extra"],

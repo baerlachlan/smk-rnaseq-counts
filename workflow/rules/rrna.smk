@@ -24,7 +24,7 @@ rule rrna_align:
         unpack(align_inputs),
         idx="resources/rrna_index/",
     output:
-        aln="results/rrna/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/align/bam/{SAMPLE}.bam"),
+        aln="results/rrna/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/rrna/bam/{SAMPLE}.bam"),
         log="results/rrna/log/{SAMPLE}.log",
         log_final="results/rrna/log/{SAMPLE}.log.final.out",
     params:

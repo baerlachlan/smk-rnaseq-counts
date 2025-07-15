@@ -39,8 +39,14 @@ release = config["ref"]["release"]
 
 
 genome_fa = f"resources/{species.capitalize()}.{build}.dna.primary_assembly.fa"
+genome_fai = f"resources/{species.capitalize()}.{build}.dna.primary_assembly.fa.fai"
+genome_chrom_sizes = f"resources/{species.capitalize()}.{build}.chrom.sizes"
 transcriptome_fa = f"resources/{species.capitalize()}.{build}.cdna.all.fa"
 annotation_gtf = f"resources/{species.capitalize()}.{build}.{str(release)}.gtf"
+annotation_sorted = f"resources/{species.capitalize()}.{build}.{str(release)}.sorted.gtf"
+annotation_intergenic = f"resources/{species.capitalize()}.{build}.{str(release)}.intergenic.sorted.bed"
+annotation_exon = f"resources/{species.capitalize()}.{build}.{str(release)}.exon.sorted.bed"
+annotation_intron = f"resources/{species.capitalize()}.{build}.{str(release)}.intron.sorted.bed"
 annotation_genePred = f"resources/{species.capitalize()}.{build}.{str(release)}.genePred"
 annotation_bed = f"resources/{species.capitalize()}.{build}.{str(release)}.bed"
 star_index_dir = "resources/star_index/"
@@ -280,8 +286,9 @@ def workflow_outputs():
             )
 
     ## Aligned reads
-    outputs.extend(expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
-    outputs.extend(expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
+    if config["align"]["keep_bam"]:
+        outputs.extend(expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
+        outputs.extend(expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
 
     ## Gene-level counts (featureCounts)
     if config["featureCounts"]["activate"]:
@@ -314,6 +321,6 @@ def workflow_outputs():
 
     ## Genome coverage
     if config["coverage"]["activate"]:
-        outputs.extend(expand("results/coverage/{SAMPLE}.bedGraph", SAMPLE=samples["sample"]))
+        outputs.extend(expand("results/coverage/{SAMPLE}.coverage.summary", SAMPLE=samples["sample"]))
 
     return outputs

@@ -10,6 +10,28 @@ rule genome_get:
         "v7.2.0/bio/reference/ensembl-sequence"
 
 
+rule genome_faidx:
+    input:
+        genome_fa,
+    output:
+        genome_fai,
+    params:
+        extra="",
+    wrapper:
+        "v7.2.0/bio/samtools/faidx"
+
+
+rule genome_chrom_sizes:
+    input:
+        genome_fai,
+    output:
+        genome_chrom_sizes,
+    shell:
+        """
+        cut -f1,2 {input} | sort -k1,1 > {output}
+        """
+
+
 rule transcriptome_get:
     output:
         transcriptome_fa,
@@ -32,6 +54,83 @@ rule annotation_get:
         flavor="",
     wrapper:
         "v7.2.0/bio/reference/ensembl-annotation"
+
+
+rule annotation_sort:
+    input:
+        annotation_gtf
+    output:
+        annotation_sorted,
+    shell:
+        """
+        cat {input} | awk '$1 ~ /^#/ {{print $0;next}} {{print $0 | "sort -k1,1 -k4,4n -k5,5n"}}' > {output}
+        """
+
+
+rule annotation_genePred:
+    input:
+        annotation_gtf,
+    output:
+        temp(annotation_genePred),
+    params:
+        extra="-genePredExt",
+    wrapper:
+        "v7.2.0/bio/ucsc/gtfToGenePred"
+
+
+rule annotation_bed:
+    input:
+        annotation_genePred
+    output:
+        temp(annotation_bed)
+    params:
+        extra="",
+    wrapper:
+        "v7.2.0/bio/ucsc/genePredToBed"
+
+
+rule annotation_intergenic:
+    input:
+        gtf=annotation_sorted,
+        chromsizes=genome_chrom_sizes,
+    output:
+        temp(annotation_intergenic),
+    conda:
+        "../envs/bedtools.yml"
+    shell:
+        """
+        bedtools complement -i {input.gtf} -g {input.chromsizes} > {output}
+        """
+
+
+rule annotation_exon:
+    input:
+        annotation_sorted,
+    output:
+        temp(annotation_exon),
+    conda:
+        "../envs/bedtools.yml"
+    shell:
+        """
+        awk '$3 == "exon"' {input} | \
+            awk 'BEGIN{{OFS="\t"}} {{print $1, $4-1, $5}}' | \
+            bedtools merge -i - > {output}
+        """
+
+
+rule annotation_intron:
+    input:
+        annotation_exon=annotation_exon,
+        annotation_intergenic=annotation_intergenic,
+        chromsizes=genome_chrom_sizes,
+    output:
+        temp(annotation_intron),
+    conda:
+        "../envs/bedtools.yml"
+    shell:
+        """
+        bedtools complement -i <(cat {input.annotation_exon} {input.annotation_intergenic} | sort -k1,1 -k2,2n) -g {input.chromsizes} > {output}
+        """
 
 
 rule star_index:
@@ -86,24 +185,3 @@ rule salmon_index:
         extra=config["salmon"]["index"]["extra"],
     wrapper:
         "v7.2.0/bio/salmon/index"
-
-rule annotation_genePred:
-    input:
-        annotation_gtf,
-    output:
-        temp(annotation_genePred),
-    params:
-        extra="-genePredExt",
-    wrapper:
-        "v7.2.0/bio/ucsc/gtfToGenePred"
-
-
-rule annotation_bed:
-    input:
-        annotation_genePred
-    output:
-        temp(annotation_bed)
-    params:
-        extra="",
-    wrapper:
-        "v7.2.0/bio/ucsc/genePredToBed"

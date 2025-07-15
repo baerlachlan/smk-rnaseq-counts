@@ -4,9 +4,15 @@ default-resources:
 set-threads:
   ## refs
   genome_get: 1
+  genome_faidx: 1
+  genome_chrom_sizes: 1
   annotation_get: 1
+  annotation_sort: 1
   annotation_genePred: 1
   annotation_bed: 1
+  annotation_intergenic: 1
+  annotation_exon: 1
+  annotation_intron: 1
   star_index: 8
   salmon_decoy: 2
   salmon_index: 4
@@ -42,16 +48,36 @@ set-threads:
   rrna_index: 1
   rrna_align: 1
   ## coverage
-  genome_coverage: 2
+  coverage_bedGraph: 2
+  coverage_summary: 1
 
 set-resources:
   ## refs
+  annotation_sort:
+    runtime: 30
+    mem: 4G
+    slurm_extra: "'--gres=tmpfs:5G'"
   annotation_genePred:
     runtime: 30
     mem: 4G
   annotation_bed:
     runtime: 30
     mem: 4G
+  annotation_intergenic:
+    runtime: 30
+    mem: 4G
+  annotation_exon:
+    runtime: 30
+    mem: 4G
+  annotation_intron:
+    runtime: 30
+    mem: 4G
+  genome_faidx:
+    runtime: 10
+    mem: 1G
+  genome_chrom_sizes:
+    runtime: 10
+    mem: 1G
   star_index:
     runtime: 30
     mem: 32G
@@ -133,6 +159,9 @@ set-resources:
     runtime: 30
     mem: 8G
   ## coverage:
-  genome_coverage:
+  coverage_bedGraph:
     runtime: 30
     mem: 8G
+  coverage_summary:
+    runtime: 10
+    mem: 4G
