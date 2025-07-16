@@ -99,7 +99,9 @@ rule annotation_intergenic:
         "../envs/bedtools.yml"
     shell:
         """
-        bedtools complement -i {input.gtf} -g {input.chromsizes} > {output}
+        awk 'BEGIN{{OFS="\t"}} {{print $1, $4-1, $5}}' {input.gtf} | \
+            bedtools merge -i - | \
+            bedtools complement -i - -g {input.chromsizes} > {output}
         """
 
 
@@ -129,7 +131,10 @@ rule annotation_intron:
         "../envs/bedtools.yml"
     shell:
         """
-        bedtools complement -i <(cat {input.annotation_exon} {input.annotation_intergenic} | sort -k1,1 -k2,2n) -g {input.chromsizes} > {output}
+        cat {input.annotation_exon} {input.annotation_intergenic} | \
+            sort -k1,1 -k2,2n | \
+            bedtools complement -i - -g {input.chromsizes} | \
+            bedtools merge -i - > {output}
         """
 
 

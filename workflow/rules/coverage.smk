@@ -21,35 +21,55 @@ rule coverage_summary:
         "../envs/bedtools.yml"
     shell:
         """
+        ####
         ## Header
-        echo -e "region\ttotal_covered_bases" > {output}
+        ####
+        echo -e "chromosome\tregion\ttotal_covered_bases\tmean_per_covered_base" > {output}.tmp
+        ####
         ## Whole genome
-        cov_genome=$(awk '{{sum += ($3 - $2) * $4}} END {{print sum}}' {input.bedGraph})
-        echo -e "genome\t$cov_genome" >> {output}
+        ####
+        ## All chromosomes
+        awk '{{cov += ($3 - $2) * $4; len += ($3 - $2)}} END {{print cov, cov / (len + 1)}}' {input.bedGraph} | \
+            awk '{{print "All" "\t" "genome" "\t" $1 "\t" $2}}' >> {output}.tmp
+        ## Per chromosome
+        awk '{{cov[$1] += ($3 - $2) * $4; len[$1] += ($3 - $2)}} END {{for (chr in cov) print chr, cov[chr], cov[chr] / len[chr]}}' {input.bedGraph} | \
+            awk '{{print $1 "\t" "genome" "\t" $2 "\t" $3}}' >> {output}.tmp
+        ####
         ## Exonic regions
-        cov_exonic=$(bedtools intersect -a {input.bedGraph} -b {input.exons} -wa | \
-            awk '{{sum += ($3 - $2) * $4}} END {{print sum}}')
-        echo -e "exons\t$cov_exonic" >> {output}
+        ####
+        ## All chromosomes
+        bedtools intersect -a {input.bedGraph} -b {input.exons} | \
+            awk '{{cov += ($3 - $2) * $4; len += ($3 - $2)}} END {{print cov, cov / (len + 1)}}' | \
+            awk '{{print "All" "\t" "exons" "\t" $1 "\t" $2}}' >> {output}.tmp
+        ## Per chromosome
+        bedtools intersect -a {input.bedGraph} -b {input.exons} | \
+            awk '{{cov[$1] += ($3 - $2) * $4; len[$1] += ($3 - $2)}} END {{for (chr in cov) print chr, cov[chr], cov[chr] / len[chr]}}' | \
+            awk '{{print $1 "\t" "exons" "\t" $2 "\t" $3}}' >> {output}.tmp
+        ####
         ## Intronic regions
-        cov_intronic=$(bedtools intersect -a {input.bedGraph} -b {input.introns} -wa | \
-            awk '{{sum += ($3 - $2) * $4}} END {{print sum}}')
-        echo -e "introns\t$cov_intronic" >> {output}
+        ####
+        ## All chromosomes
+        bedtools intersect -a {input.bedGraph} -b {input.introns} | \
+            awk '{{cov += ($3 - $2) * $4; len += ($3 - $2)}} END {{print cov, cov / (len + 1)}}' | \
+            awk '{{print "All" "\t" "introns" "\t" $1 "\t" $2}}' >> {output}.tmp
+        ## Per chromosome
+        bedtools intersect -a {input.bedGraph} -b {input.introns} | \
+            awk '{{cov[$1] += ($3 - $2) * $4; len[$1] += ($3 - $2)}} END {{for (chr in cov) print chr, cov[chr], cov[chr] / len[chr]}}' | \
+            awk '{{print $1 "\t" "introns" "\t" $2 "\t" $3}}' >> {output}.tmp
+        ####
         ## Intergenic regions
-        cov_intergenic=$(bedtools intersect -a {input.bedGraph} -b {input.intergenic} -wa | \
-            awk '{{sum += ($3 - $2) * $4}} END {{print sum}}')
-        echo -e "intergenic\t$cov_intergenic" >> {output}
-        ## Chromosomes
-        awk '{{cov[$1] += ($3 - $2) * $4}} END {{for (chr in cov) print chr, cov[chr]}}' {input.bedGraph} | \
-            awk '{{print $1 "\t" $2}}' >> {output}
+        ####
+        ## All chromosomes
+        bedtools intersect -a {input.bedGraph} -b {input.intergenic} | \
+            awk '{{cov += ($3 - $2) * $4; len += ($3 - $2)}} END {{print cov, cov / (len + 1)}}' | \
+            awk '{{print "All" "\t" "intergenic" "\t" $1 "\t" $2}}' >> {output}.tmp
+        ## Per chromosome
+        bedtools intersect -a {input.bedGraph} -b {input.intergenic} | \
+            awk '{{cov[$1] += ($3 - $2) * $4; len[$1] += ($3 - $2)}} END {{for (chr in cov) print chr, cov[chr], cov[chr] / len[chr]}}' | \
+            awk '{{print $1 "\t" "intergenic" "\t" $2 "\t" $3}}' >> {output}.tmp
+        ####
+        ## Final sort
+        ####
+        awk 'NR==1{{print $0; next}} {{print $0 | "sort -k1,1n"}}' {output}.tmp > {output}
+        rm {output}.tmp
         """
-
-# rule coverage_bigWig:
-#     input:
-#         bedgraph="results/coverage/{SAMPLE}.bedGraph",
-#         chromsizes=genome_chrom_sizes,
-#     output:
-#         "results/coverage/{SAMPLE}.bw"
-#     params:
-#         ""
-#     wrapper:
-#         "v7.2.0/bio/ucsc/bedGraphToBigWig"
