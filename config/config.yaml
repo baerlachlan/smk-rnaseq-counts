@@ -17,10 +17,17 @@ data_dir: "../raw_data"
 ref:
   ## Ensembl species name
   species: homo_sapiens
-  ## Emsembl release
+  ## Ensembl release
   release: 112
   ## Genome build
   build: GRCh38
+  ## Merge all relevant references/annotations with pre-specified FASTA file
+  ## Commonly used for custom sequences and synthetic spike-ins, etc
+  ## Require genome as FASTA file and annotation as GTF file
+  merge_with:
+    activate: False
+    fasta: "resources/genome_to_merge.fa"
+    gtf: "resources/annotation_to_merge.gtf"
 
 ## Read length of raw FASTQ data
 ## Used for calculating the maximum possible overhang for reads across splice junctions

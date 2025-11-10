@@ -1,6 +1,6 @@
 rule genome_get:
     output:
-        genome_fa,
+        temp("resources/genome.fa") if config["ref"]["merge_with"]["activate"] else genome_fa,
     params:
         species=config["ref"]["species"],
         datatype="dna",
@@ -8,6 +8,18 @@ rule genome_get:
         release=config["ref"]["release"],
     wrapper:
         "v7.2.0/bio/reference/ensembl-sequence"
+
+
+rule genome_merge:
+    input:
+        genome="resources/genome.fa",
+        merge=config["ref"]["merge_with"]["fasta"],
+    output:
+        genome_fa,
+    shell:
+        """
+        cat {input.genome} {input.merge} > {output}
+        """
 
 
 rule genome_faidx:
@@ -34,7 +46,7 @@ rule genome_chrom_sizes:
 
 rule transcriptome_get:
     output:
-        transcriptome_fa,
+        temp("resources/transcriptome.fa") if config["ref"]["merge_with"]["activate"] else transcriptome_fa,
     params:
         species=config["ref"]["species"],
         datatype="cdna",
@@ -44,9 +56,34 @@ rule transcriptome_get:
         "v7.2.0/bio/reference/ensembl-sequence"
 
 
+rule transcriptome_fasta:
+    input:
+        fasta=config["ref"]["merge_with"]["fasta"],
+        annotation=config["ref"]["merge_with"]["gtf"],
+    output:
+        transcript_fasta=temp("resources/transcriptome_to_merge.fa"),
+    params:
+        fasta_flag="-w",
+        extra="",
+    wrapper:
+        "v7.2.0/bio/gffread"
+
+
+rule transcriptome_merge:
+    input:
+        transcriptome="resources/transcriptome.fa",
+        merge="resources/transcriptome_to_merge.fa",
+    output:
+        transcriptome_fa,
+    shell:
+        """
+        cat {input.transcriptome} {input.merge} > {output}
+        """
+
+
 rule annotation_get:
     output:
-        annotation_gtf,
+        temp("resources/annotation.gtf") if config["ref"]["merge_with"]["activate"] else annotation_gtf,
     params:
         species=config["ref"]["species"],
         build=config["ref"]["build"],
@@ -54,6 +91,18 @@ rule annotation_get:
         flavor="",
     wrapper:
         "v7.2.0/bio/reference/ensembl-annotation"
+
+
+rule annotation_merge:
+    input:
+        annotation="resources/annotation.gtf",
+        merge=config["ref"]["merge_with"]["gtf"],
+    output:
+        annotation_gtf,
+    shell:
+        """
+        cat {input.annotation} {input.merge} > {output}
+        """
 
 
 rule annotation_sort:

@@ -4,9 +4,13 @@ default-resources:
 set-threads:
   ## refs
   genome_get: 1
+  genome_merge: 1
   genome_faidx: 1
   genome_chrom_sizes: 1
+  transcriptome_fasta: 4
+  transcriptome_merge: 1
   annotation_get: 1
+  annotation_merge: 1
   annotation_sort: 1
   annotation_genePred: 1
   annotation_bed: 1
@@ -53,10 +57,28 @@ set-threads:
 
 set-resources:
   ## refs
+  genome_merge:
+    runtime: 10
+    mem: 4G
+  genome_faidx:
+    runtime: 10
+    mem: 1G
+  genome_chrom_sizes:
+    runtime: 10
+    mem: 1G
+  transcriptome_fasta:
+    runtime: 30
+    mem: 8G
+  transcriptome_merge:
+    runtime: 10
+    mem: 4G
   annotation_sort:
     runtime: 30
     mem: 4G
     slurm_extra: "'--gres=tmpfs:5G'"
+  annotation_merge:
+    runtime: 10
+    mem: 4G
   annotation_genePred:
     runtime: 30
     mem: 4G
@@ -72,12 +94,6 @@ set-resources:
   annotation_intron:
     runtime: 30
     mem: 4G
-  genome_faidx:
-    runtime: 10
-    mem: 1G
-  genome_chrom_sizes:
-    runtime: 10
-    mem: 1G
   star_index:
     runtime: 90
     mem: 64G
