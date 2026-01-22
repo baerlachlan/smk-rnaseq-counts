@@ -87,6 +87,13 @@ salmon:
 ## Activate these if you require additional QC, deeper analysis, or niche
 ## processing of your data
 
+junctions:
+  activate: False
+  ## Unstranded = XS
+  ## Stranded = FR
+  ## Reverse stranded = RF
+  regtools_extra: "-s RF"
+
 ## UMI-tools configuration
 deduplicate:
   ## Boolean to specify whether alignments should be deduplicated by UMI and position

@@ -35,6 +35,9 @@ set-threads:
   ## deduplicate
   deduplicate: 1
   deduplicate_index: 8
+  ## junctions
+  junctions_count: 8
+  junctions_adjust: 1
   ## count
   featureCounts_s0: 8
   featureCounts_s1: 8
@@ -139,6 +142,13 @@ set-resources:
   deduplicate_index:
     runtime: 60
     mem: 32G
+  ## junctions
+  junctions_count:
+    runtime: 60
+    mem: 8G
+  junctions_adjust:
+    runtime: 10
+    mem: 4G
   ## count
   featureCounts_s0:
     runtime: 240

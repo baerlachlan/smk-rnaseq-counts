@@ -5,3 +5,5 @@ resources/*
 *.jcounts
 *.featureCounts
 results/salmon/*/aux_info/bootstrap/
+results/junctions/*.bed
+results/rseqc/inner_distance/*.inner_distance.txt

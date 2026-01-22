@@ -17,6 +17,7 @@ include: "rules/salmon.smk"
 
 ## Optional
 include: "rules/deduplicate.smk"
+include: "rules/junctions.smk"
 include: "rules/rseqc.smk"
 include: "rules/rrna.smk"
 include: "rules/coverage.smk"

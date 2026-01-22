@@ -168,6 +168,19 @@ def align_inputs(wildcards):
             return {"fq1": "results/merge/fastq/{SAMPLE}_R0.fastq.gz"}
 
 
+def junctions_inputs(wildcards):
+    if config["deduplicate"]["activate"]:
+        return {
+            "bam": "results/deduplicate/bam/{SAMPLE}.bam",
+            "bai": "results/deduplicate/bam/{SAMPLE}.bam.bai",
+        }
+    else:
+        return {
+            "bam": "results/align/bam/{SAMPLE}.bam",
+            "bai": "results/align/bam/{SAMPLE}.bam.bai",
+        }
+
+
 def featureCounts_inputs(wildcards):
     if config["deduplicate"]["activate"]:
         return {
@@ -289,6 +302,12 @@ def workflow_outputs():
     if config["align"]["keep_bam"]:
         outputs.extend(expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
         outputs.extend(expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
+
+    ## Regtools splice junctions
+    if config["junctions"]["activate"]:
+        outputs.extend(
+            expand("results/junctions/{SAMPLE}.adj.bed", SAMPLE=samples["sample"])
+        )
 
     ## Gene-level counts (featureCounts)
     if config["featureCounts"]["activate"]:
