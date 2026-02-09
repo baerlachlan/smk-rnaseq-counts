@@ -82,6 +82,15 @@ elif all(single_end_samples):
     pair_tags = ["R0"]
 
 
+def _is_missing(x):
+    return (
+        x is None
+        or pd.isna(x)
+        or str(x).strip() == ""
+        or str(x).strip().upper() == "NA"
+    )
+
+
 def get_override(sample, unit, key, default=None):
     ## unit override
     try:
