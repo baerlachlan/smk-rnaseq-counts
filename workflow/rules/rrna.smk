@@ -24,10 +24,19 @@ rule rrna_align:
         unpack(align_inputs),
         idx="resources/rrna_index/",
     output:
-        aln="results/rrna/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/rrna/bam/{SAMPLE}.bam"),
+        aln=temp("results/rrna/bam/{SAMPLE}.unsorted.bam"),
         log="results/rrna/log/{SAMPLE}.log",
         log_final="results/rrna/log/{SAMPLE}.log.final.out",
     params:
         extra=f"{config["align"]["extra"]}",
     wrapper:
         "v5.5.2/bio/star/align"
+
+
+rule rrna_align_sort:
+    input:
+        "results/rrna/bam/{SAMPLE}.unsorted.bam",
+    output:
+        "results/rrna/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/rrna/bam/{SAMPLE}.bam")
+    wrapper:
+        "v7.2.0/bio/samtools/sort"

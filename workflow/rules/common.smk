@@ -82,6 +82,18 @@ elif all(single_end_samples):
     pair_tags = ["R0"]
 
 
+def get_override(sample, unit, key, default=None):
+    ## unit override
+    try:
+        x = units.loc[(sample, unit), key]
+    except KeyError:
+        x = None
+    if not _is_missing(x):
+        return x
+    ## default
+    return default
+
+
 ####
 ## Wildcard constraints
 ####
@@ -251,6 +263,23 @@ def bam_inputs():
         return "results/deduplicate/bam/{SAMPLE}.bam"
     else:
         return "results/align/bam/{SAMPLE}.bam"
+
+
+####
+## Params input functions
+####
+
+
+def fastp_args(wc):
+    sample = wc.SAMPLE
+    args = []
+    args.append(config["trim"]["extra"])
+    if get_override(wc.SAMPLE, wc.UNIT, "umi_trim", config["trim"]["umi"]["activate"]):
+        args.append("--umi")
+        args.append(f"--umi_loc {str(get_override(wc.SAMPLE, wc.UNIT, 'umi_loc', config['trim']['umi']['umi_loc']))}")
+        args.append(f"--umi_len {int(get_override(wc.SAMPLE, wc.UNIT, 'umi_len', config['trim']['umi']['umi_len']))}")
+        args.append(f"--umi_skip {int(get_override(wc.SAMPLE, wc.UNIT, 'umi_skip', config['trim']['umi']['umi_skip']))}")
+    return " ".join(str(x) for x in args)
 
 
 ####

@@ -24,6 +24,6 @@ rule trim_pe:
         html="results/trim/log/{SAMPLE}_{UNIT}.html",
         json="results/trim/log/{SAMPLE}_{UNIT}.json",
     params:
-        extra=config["trim"]["extra"],
+        extra=fastp_args,
     wrapper:
         "v7.2.0/bio/fastp"

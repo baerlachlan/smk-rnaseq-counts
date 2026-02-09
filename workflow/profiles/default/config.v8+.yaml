@@ -31,6 +31,7 @@ set-threads:
   merge: 1
   ## align
   align: 16
+  align_sort: 8
   align_index: 8
   ## deduplicate
   deduplicate: 1
@@ -54,6 +55,7 @@ set-threads:
   rrna_get: 1
   rrna_index: 1
   rrna_align: 16
+  rrna_align_sort: 8
   ## coverage
   coverage_bedGraph: 2
   coverage_summary: 1
@@ -118,10 +120,10 @@ set-resources:
     mem: 2G
   ## trim
   trim_se:
-    runtime: 60
+    runtime: 90
     mem: 8G
   trim_pe:
-    runtime: 60
+    runtime: 90
     mem: 8G
   ## merge
   merge:
@@ -131,6 +133,10 @@ set-resources:
   align:
     runtime: 180
     mem: 64G
+    slurm_extra: "'--gres=tmpfs:100G'"
+  align_sort:
+    runtime: 30
+    mem: 32G
     slurm_extra: "'--gres=tmpfs:100G'"
   align_index:
     runtime: 60
@@ -188,6 +194,10 @@ set-resources:
   rrna_align:
     runtime: 30
     mem: 64G
+    slurm_extra: "'--gres=tmpfs:100G'"
+  rrna_align_sort:
+    runtime: 30
+    mem: 32G
     slurm_extra: "'--gres=tmpfs:100G'"
   ## coverage
   coverage_bedGraph:

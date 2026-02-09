@@ -44,6 +44,12 @@ fastqc:
 trim:
   ## Exclude `--detect_adapter_for_pe` for single-end
   extra: "--detect_adapter_for_pe --qualified_quality_phred 20 --length_required 35 --trim_poly_g"
+  ## UMI processing
+  umi:
+    activate: False
+    umi_loc: "per_read"
+    umi_len: "5"
+    umi_skip: "2"
 
 ## STAR configuration
 align:
@@ -51,7 +57,7 @@ align:
   keep_bam: True
   ## The align rule is configured to specify STAR's --sjdbOverhang parameter using the read_length defined above
   ## Specify any further parameters here
-  extra: "--outSAMtype BAM SortedByCoordinate"
+  extra: "--outSAMtype BAM Unsorted"
 
 ## featureCounts configuration
 featureCounts:
