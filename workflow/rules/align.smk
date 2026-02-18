@@ -7,7 +7,7 @@ rule align:
         log="results/align/log/{SAMPLE}.log",
         log_final="results/align/log/{SAMPLE}.log.final.out",
     params:
-        extra={config["align"]["extra"]},
+        extra=config["align"]["extra"],
     wrapper:
         "v7.2.0/bio/star/align"
 
