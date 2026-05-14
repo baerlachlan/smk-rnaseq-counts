@@ -1,6 +1,3 @@
-default-resources:
-  slurm_extra: "''"
-
 set-threads:
   ## refs
   genome_get: 1
