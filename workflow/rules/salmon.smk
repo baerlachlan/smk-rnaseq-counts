@@ -5,6 +5,8 @@ rule salmon_quant:
     output:
         quant="results/salmon/{SAMPLE}/quant.sf",
         lib="results/salmon/{SAMPLE}/lib_format_counts.json",
+    log:
+        "logs/salmon_quant/{SAMPLE}.log",
     params:
         libtype=config["salmon"]["quant"]["libtype"],
         extra=config["salmon"]["quant"]["extra"],

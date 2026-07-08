@@ -4,6 +4,8 @@ rule fastqc_raw:
     output:
         html="results/raw_data/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.html",
         zip="results/raw_data/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.zip",
+    log:
+        "logs/fastqc_raw/{SAMPLE}_{UNIT}_{PAIRTAG}.log",
     params:
         extra=config["fastqc"]["extra"],
     wrapper:
@@ -16,6 +18,8 @@ rule fastqc_trim:
     output:
         html="results/trim/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.html",
         zip="results/trim/FastQC/{SAMPLE}_{UNIT}_{PAIRTAG}_fastqc.zip",
+    log:
+        "logs/fastqc_trim/{SAMPLE}_{UNIT}_{PAIRTAG}.log",
     params:
         extra=config["fastqc"]["extra"],
     wrapper:
@@ -28,6 +32,8 @@ rule fastqc_align:
     output:
         html="results/align/FastQC/{SAMPLE}_fastqc.html",
         zip="results/align/FastQC/{SAMPLE}_fastqc.zip",
+    log:
+        "logs/fastqc_align/{SAMPLE}.log",
     params:
         extra=config["fastqc"]["extra"],
     wrapper:

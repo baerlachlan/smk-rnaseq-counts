@@ -3,6 +3,8 @@ rule coverage_bedGraph:
         bam_inputs(),
     output:
         "results/coverage/{SAMPLE}.bedGraph" if config["coverage"]["keep_bedGraphs"] else temp("results/coverage/{SAMPLE}.bedGraph")
+    log:
+        "logs/coverage_bedGraph/{SAMPLE}.log",
     params:
         "-bg"
     wrapper:
@@ -17,6 +19,8 @@ rule coverage_summary:
         intergenic=annotation_intergenic,
     output:
         "results/coverage/{SAMPLE}.coverage.summary"
+    log:
+        "logs/coverage_summary/{SAMPLE}.log",
     conda:
         "../envs/bedtools.yml"
     shell:

@@ -1,17 +1,44 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
+type: object
 properties:
   sample:
     type: string
+    minLength: 1
     description: name/id of the sample the unit was sequenced from
   unit:
     type: string
+    minLength: 1
     description: unit id
   fq1:
     type: string
+    minLength: 1
     description: path to FASTQ file (first FASTQ file for paired end sequencing)
   fq2:
-    type: string
+    type:
+      - string
+      - "null"
     description: path to second FASTQ file (leave blank for single end sequencing)
+  umi_trim:
+    type: boolean
+    description: unit-specific override for fastp UMI processing
+  umi_loc:
+    type: string
+    enum:
+      - index1
+      - index2
+      - read1
+      - read2
+      - per_index
+      - per_read
+    description: unit-specific override for fastp UMI location
+  umi_len:
+    type: integer
+    minimum: 1
+    description: unit-specific override for UMI length
+  umi_skip:
+    type: integer
+    minimum: 0
+    description: unit-specific override for bases skipped before the UMI
 
 required:
   - sample

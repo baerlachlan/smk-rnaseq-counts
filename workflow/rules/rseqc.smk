@@ -4,6 +4,8 @@ rule read_distribution:
         refgene=annotation_bed,
     output:
         "results/rseqc/read_distribution/{SAMPLE}.read_distribution.txt"
+    log:
+        "logs/read_distribution/{SAMPLE}.log",
     wrapper:
         "v7.2.0/bio/rseqc/read_distribution"
 
@@ -17,9 +19,11 @@ rule inner_distance:
         freq="results/rseqc/inner_distance/{SAMPLE}.inner_distance_freq.txt",
         pdf="results/rseqc/inner_distance/{SAMPLE}.inner_distance_plot.pdf",
         plot_r="results/rseqc/inner_distance/{SAMPLE}.inner_distance_plot.r",
+    log:
+        "logs/inner_distance/{SAMPLE}.log",
     conda:
         "../envs/rseqc.yml"
     shell:
         """
-        inner_distance.py -i {input.aln} -o results/rseqc/inner_distance/{wildcards.SAMPLE} -r {input.refgene}
+        inner_distance.py -i {input.aln} -o results/rseqc/inner_distance/{wildcards.SAMPLE} -r {input.refgene} 2> {log}
         """

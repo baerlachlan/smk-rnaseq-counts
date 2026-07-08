@@ -6,6 +6,8 @@ rule align:
         aln=temp("results/align/bam/{SAMPLE}.unsorted.bam"),
         log="results/align/log/{SAMPLE}.log",
         log_final="results/align/log/{SAMPLE}.log.final.out",
+    log:
+        "logs/align/{SAMPLE}.log",
     params:
         extra=config["align"]["extra"],
     wrapper:
@@ -17,6 +19,8 @@ rule align_sort:
         "results/align/bam/{SAMPLE}.unsorted.bam",
     output:
         "results/align/bam/{SAMPLE}.bam" if config["align"]["keep_bam"] else temp("results/align/bam/{SAMPLE}.bam")
+    log:
+        "logs/align_sort/{SAMPLE}.log",
     wrapper:
         "v7.2.0/bio/samtools/sort"
 
@@ -26,5 +30,7 @@ rule align_index:
         "results/align/bam/{SAMPLE}.bam",
     output:
         "results/align/bam/{SAMPLE}.bam.bai",
+    log:
+        "logs/align_index/{SAMPLE}.log",
     wrapper:
         "v7.2.0/bio/samtools/index"

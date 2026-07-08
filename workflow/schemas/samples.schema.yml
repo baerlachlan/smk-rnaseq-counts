@@ -1,7 +1,9 @@
 $schema: "https://json-schema.org/draft/2020-12/schema"
+type: object
 properties:
   sample:
     type: string
+    minLength: 1
     description: unique names/ids of the sequenced samples
 
 required:

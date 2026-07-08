@@ -1,6 +1,8 @@
 rule genome_get:
     output:
         temp("resources/genome.fa") if config["ref"]["merge_with"]["activate"] else genome_fa,
+    log:
+        "logs/genome_get/genome_get.log",
     params:
         species=config["ref"]["species"],
         datatype="dna",
@@ -16,9 +18,11 @@ rule genome_merge:
         merge=config["ref"]["merge_with"]["fasta"],
     output:
         genome_fa,
+    log:
+        "logs/genome_merge/genome_merge.log",
     shell:
         """
-        cat {input.genome} {input.merge} > {output}
+        cat {input.genome} {input.merge} > {output} 2> {log}
         """
 
 
@@ -27,6 +31,8 @@ rule genome_faidx:
         genome_fa,
     output:
         genome_fai,
+    log:
+        "logs/genome_faidx/genome_faidx.log",
     params:
         extra="",
     wrapper:
@@ -38,15 +44,19 @@ rule genome_chrom_sizes:
         genome_fai,
     output:
         genome_chrom_sizes,
+    log:
+        "logs/genome_chrom_sizes/genome_chrom_sizes.log",
     shell:
         """
-        cut -f1,2 {input} | sort -k1,1 > {output}
+        cut -f1,2 {input} | sort -k1,1 > {output} 2> {log}
         """
 
 
 rule transcriptome_get:
     output:
         temp("resources/transcriptome.fa") if config["ref"]["merge_with"]["activate"] else transcriptome_fa,
+    log:
+        "logs/transcriptome_get/transcriptome_get.log",
     params:
         species=config["ref"]["species"],
         datatype="cdna",
@@ -62,6 +72,8 @@ rule transcriptome_fasta:
         annotation=config["ref"]["merge_with"]["gtf"],
     output:
         transcript_fasta=temp("resources/transcriptome_to_merge.fa"),
+    log:
+        "logs/transcriptome_fasta/transcriptome_fasta.log",
     params:
         fasta_flag="-w",
         extra="",
@@ -75,15 +87,19 @@ rule transcriptome_merge:
         merge="resources/transcriptome_to_merge.fa",
     output:
         transcriptome_fa,
+    log:
+        "logs/transcriptome_merge/transcriptome_merge.log",
     shell:
         """
-        cat {input.transcriptome} {input.merge} > {output}
+        cat {input.transcriptome} {input.merge} > {output} 2> {log}
         """
 
 
 rule annotation_get:
     output:
         temp("resources/annotation.gtf") if config["ref"]["merge_with"]["activate"] else annotation_gtf,
+    log:
+        "logs/annotation_get/annotation_get.log",
     params:
         species=config["ref"]["species"],
         build=config["ref"]["build"],
@@ -99,9 +115,11 @@ rule annotation_merge:
         merge=config["ref"]["merge_with"]["gtf"],
     output:
         annotation_gtf,
+    log:
+        "logs/annotation_merge/annotation_merge.log",
     shell:
         """
-        cat {input.annotation} {input.merge} > {output}
+        cat {input.annotation} {input.merge} > {output} 2> {log}
         """
 
 
@@ -110,9 +128,11 @@ rule annotation_sort:
         annotation_gtf
     output:
         annotation_sorted,
+    log:
+        "logs/annotation_sort/annotation_sort.log",
     shell:
         """
-        cat {input} | awk '$1 ~ /^#/ {{print $0;next}} {{print $0 | "sort -k1,1 -k4,4n -k5,5n"}}' > {output}
+        cat {input} | awk '$1 ~ /^#/ {{print $0;next}} {{print $0 | "sort -k1,1 -k4,4n -k5,5n"}}' > {output} 2> {log}
         """
 
 
@@ -121,6 +141,8 @@ rule annotation_genePred:
         annotation_gtf,
     output:
         temp(annotation_genePred),
+    log:
+        "logs/annotation_genePred/annotation_genePred.log",
     params:
         extra="-genePredExt",
     wrapper:
@@ -132,6 +154,8 @@ rule annotation_bed:
         annotation_genePred
     output:
         temp(annotation_bed)
+    log:
+        "logs/annotation_bed/annotation_bed.log",
     params:
         extra="",
     wrapper:
@@ -144,13 +168,16 @@ rule annotation_intergenic:
         chromsizes=genome_chrom_sizes,
     output:
         temp(annotation_intergenic),
+    log:
+        "logs/annotation_intergenic/annotation_intergenic.log",
     conda:
         "../envs/bedtools.yml"
     shell:
         """
-        awk 'BEGIN{{OFS="\t"}} {{print $1, $4-1, $5}}' {input.gtf} | \
+        awk 'BEGIN{{OFS="\t"}} $1 !~ /^#/ && $3 == "gene" {{print $1, $4-1, $5}}' {input.gtf} | \
+            bedtools sort -i - | \
             bedtools merge -i - | \
-            bedtools complement -i - -g {input.chromsizes} > {output}
+            bedtools complement -i - -g {input.chromsizes} > {output} 2> {log}
         """
 
 
@@ -159,13 +186,15 @@ rule annotation_exon:
         annotation_sorted,
     output:
         temp(annotation_exon),
+    log:
+        "logs/annotation_exon/annotation_exon.log",
     conda:
         "../envs/bedtools.yml"
     shell:
         """
-        awk '$3 == "exon"' {input} | \
-            awk 'BEGIN{{OFS="\t"}} {{print $1, $4-1, $5}}' | \
-            bedtools merge -i - > {output}
+        awk 'BEGIN{{OFS="\t"}} $1 !~ /^#/ && $3 == "exon" {{print $1, $4-1, $5}}' {input} | \
+            bedtools sort -i - | \
+            bedtools merge -i - > {output} 2> {log}
         """
 
 
@@ -176,6 +205,8 @@ rule annotation_intron:
         chromsizes=genome_chrom_sizes,
     output:
         temp(annotation_intron),
+    log:
+        "logs/annotation_intron/annotation_intron.log",
     conda:
         "../envs/bedtools.yml"
     shell:
@@ -183,7 +214,7 @@ rule annotation_intron:
         cat {input.annotation_exon} {input.annotation_intergenic} | \
             sort -k1,1 -k2,2n | \
             bedtools complement -i - -g {input.chromsizes} | \
-            bedtools merge -i - > {output}
+            bedtools merge -i - > {output} 2> {log}
         """
 
 
@@ -193,6 +224,8 @@ rule star_index:
         gtf=annotation_gtf,
     output:
         directory(star_index_dir),
+    log:
+        "logs/star_index/star_index.log",
     params:
         sjdbOverhang=int(config["read_length"]) - 1,
         extra="",
@@ -207,6 +240,8 @@ rule salmon_decoy:
     output:
         gentrome=temp(gentrome_fa),
         decoys=temp(decoys_txt),
+    log:
+        "logs/salmon_decoy/salmon_decoy.log",
     wrapper:
         "v7.2.0/bio/salmon/decoys"
 
@@ -235,6 +270,8 @@ rule salmon_index:
             "versionInfo.json",
         ),
         directory(salmon_index_dir),  # Added for dependency
+    log:
+        "logs/salmon_index/salmon_index.log",
     params:
         extra=config["salmon"]["index"]["extra"],
     wrapper:

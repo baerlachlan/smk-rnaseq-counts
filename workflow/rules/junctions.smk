@@ -3,13 +3,15 @@ rule junctions_count:
         unpack(junctions_inputs),
     output:
         "results/junctions/{SAMPLE}.bed",
+    log:
+        "logs/junctions_count/{SAMPLE}.log",
     params:
         extra=config["junctions"]["regtools_extra"],
     conda:
         "../envs/regtools.yml"
     shell:
         """
-        regtools junctions extract {params.extra} {input.bam} -o {output}
+        regtools junctions extract {params.extra} {input.bam} -o {output} 2> {log}
         """
 
 
@@ -23,7 +25,9 @@ rule junctions_adjust:
         "results/junctions/{SAMPLE}.bed"
     output:
         "results/junctions/{SAMPLE}.adj.bed"
+    log:
+        "logs/junctions_adjust/{SAMPLE}.log",
     shell:
         """
-        awk '{{split($11, sizes, ","); print $1, $2+sizes[1], $3-sizes[2], $4, $5, $6}}' OFS="\t" {input} > {output}
+        awk '{{split($11, sizes, ","); print $1, $2+sizes[1], $3-sizes[2], $4, $5, $6}}' OFS="\t" {input} > {output} 2> {log}
         """

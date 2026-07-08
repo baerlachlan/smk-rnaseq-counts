@@ -44,8 +44,6 @@ set-threads:
   salmon_quant: 8
   ## read_distribution
   read_distribution: 1
-  ## read_gc
-  read_gc: 1
   ## inner_distance:
   inner_distance: 1
   ## rrna
@@ -53,6 +51,7 @@ set-threads:
   rrna_index: 1
   rrna_align: 16
   rrna_align_sort: 8
+  rrna_align_index: 8
   ## coverage
   coverage_bedGraph: 2
   coverage_summary: 1
@@ -77,7 +76,7 @@ set-resources:
   annotation_sort:
     runtime: 30
     mem: 4G
-    slurm_extra: "'--gres=tmpfs:5G'"
+    gres: "tmpfs:5G"
   annotation_merge:
     runtime: 10
     mem: 4G
@@ -130,11 +129,11 @@ set-resources:
   align:
     runtime: 180
     mem: 64G
-    slurm_extra: "'--gres=tmpfs:100G'"
+    gres: "tmpfs:100G"
   align_sort:
     runtime: 30
     mem: 32G
-    slurm_extra: "'--gres=tmpfs:100G'"
+    gres: "tmpfs:100G"
   align_index:
     runtime: 60
     mem: 32G
@@ -156,25 +155,21 @@ set-resources:
   featureCounts_s0:
     runtime: 240
     mem: 8G
-    slurm_extra: "'--gres=tmpfs:50G'"
+    gres: "tmpfs:50G"
   featureCounts_s1:
     runtime: 240
     mem: 8G
-    slurm_extra: "'--gres=tmpfs:50G'"
+    gres: "tmpfs:50G"
   featureCounts_s2:
     runtime: 240
     mem: 8G
-    slurm_extra: "'--gres=tmpfs:50G'"
+    gres: "tmpfs:50G"
   ## salmon
   salmon_quant:
     runtime: 180
     mem: 32G
   ## read_distribution
   read_distribution:
-    runtime: 60
-    mem: 8G
-  ## read_gc
-  read_gc:
     runtime: 60
     mem: 8G
   ## inner_distance
@@ -191,11 +186,14 @@ set-resources:
   rrna_align:
     runtime: 30
     mem: 64G
-    slurm_extra: "'--gres=tmpfs:100G'"
+    gres: "tmpfs:100G"
   rrna_align_sort:
     runtime: 30
     mem: 32G
-    slurm_extra: "'--gres=tmpfs:100G'"
+    gres: "tmpfs:100G"
+  rrna_align_index:
+    runtime: 60
+    mem: 32G
   ## coverage
   coverage_bedGraph:
     runtime: 60

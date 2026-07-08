@@ -375,6 +375,7 @@ def workflow_outputs():
     ## rDNA alignments
     if config["rrna"]["activate"]:
         outputs.extend(expand("results/rrna/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
+        outputs.extend(expand("results/rrna/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
 
     ## Genome coverage
     if config["coverage"]["activate"]:

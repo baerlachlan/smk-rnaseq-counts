@@ -4,7 +4,9 @@ rule deduplicate:
         bai="results/align/bam/{SAMPLE}.bam.bai",
     output:
         bam="results/deduplicate/bam/{SAMPLE}.bam" if config["deduplicate"]["keep_bam"] else temp("results/deduplicate/bam/{SAMPLE}.bam"),
-        log="results/deduplicate/log/{SAMPLE}.log",
+        tool_log="results/deduplicate/log/{SAMPLE}.log",
+    log:
+        "logs/deduplicate/{SAMPLE}.log",
     params:
         extra=config["deduplicate"]["extra"],
     conda:
@@ -12,7 +14,7 @@ rule deduplicate:
     shell:
         """
         umi_tools dedup --stdin={input.bam} --stdout={output.bam} \
-        --log={output.log} {params.extra}
+        --log={output.tool_log} {params.extra} 2> {log}
         """
 
 
@@ -21,5 +23,7 @@ rule deduplicate_index:
         "results/deduplicate/bam/{SAMPLE}.bam",
     output:
         "results/deduplicate/bam/{SAMPLE}.bam.bai",
+    log:
+        "logs/deduplicate_index/{SAMPLE}.log",
     wrapper:
         "v7.2.0/bio/samtools/index"

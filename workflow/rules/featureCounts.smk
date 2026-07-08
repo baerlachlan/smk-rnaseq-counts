@@ -9,6 +9,8 @@ rule featureCounts_s0:
             ".featureCounts",
             ".featureCounts.summary",
         ),
+    log:
+        "logs/featureCounts_s0/featureCounts_s0.log",
     params:
         strand=0,
         extra=config["featureCounts"]["extra"],
@@ -27,6 +29,8 @@ rule featureCounts_s1:
             ".featureCounts",
             ".featureCounts.summary",
         ),
+    log:
+        "logs/featureCounts_s1/featureCounts_s1.log",
     params:
         strand=1,
         extra=config["featureCounts"]["extra"],
@@ -45,6 +49,8 @@ rule featureCounts_s2:
             ".featureCounts",
             ".featureCounts.summary",
         ),
+    log:
+        "logs/featureCounts_s2/featureCounts_s2.log",
     params:
         strand=2,
         extra=config["featureCounts"]["extra"],
