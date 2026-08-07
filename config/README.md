@@ -81,7 +81,7 @@ Optional UMI override columns:
 | `umi_trim` | Override whether fastp UMI processing is used for this unit. |
 | `umi_loc` | Override UMI location for this unit. |
 | `umi_len` | Override UMI length for this unit. |
-| `umi_skip` | Override number of bases skipped before the UMI for this unit. |
+| `umi_skip` | Override number of bases removed after the UMI for this unit. |
 
 Per-unit `umi_len` and `umi_skip` values should be written as integers.
 
@@ -205,12 +205,14 @@ Values are:
 
 | Value | Meaning | Output directory |
 | --- | --- | --- |
-| `0` | Unstranded | `results/featureCounts/unstranded/` |
-| `1` | Stranded | `results/featureCounts/stranded/` |
-| `2` | Reverse-stranded | `results/featureCounts/reverse/` |
+| `0` | Unstranded | `results/featureCounts/{align,deduplicate}/unstranded/` |
+| `1` | Stranded | `results/featureCounts/{align,deduplicate}/stranded/` |
+| `2` | Reverse-stranded | `results/featureCounts/{align,deduplicate}/reverse/` |
 
 Using all three values can help infer library strandedness from featureCounts summary statistics.
 If strandedness is known, provide only the relevant value.
+Aligned featureCounts outputs are always generated when featureCounts is active.
+If `deduplicate.activate` is `True`, featureCounts also generates a separate count set from the deduplicated BAMs.
 
 For example:
 
@@ -231,7 +233,8 @@ deduplicate:
 ```
 
 Deduplicates aligned BAM files using UMI-tools.
-When active, supported downstream modules use deduplicated BAM files.
+When active, featureCounts produces both aligned and deduplicated count sets.
+Other supported downstream modules use deduplicated BAM files.
 
 ### Splice Junctions
 

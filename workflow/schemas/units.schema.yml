@@ -38,7 +38,7 @@ properties:
   umi_skip:
     type: integer
     minimum: 0
-    description: unit-specific override for bases skipped before the UMI
+    description: unit-specific override for bases removed after the UMI
 
 required:
   - sample

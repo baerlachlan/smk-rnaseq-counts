@@ -62,6 +62,7 @@ align:
 ## featureCounts configuration
 featureCounts:
   ## Specify as True to produce gene-level counts
+  ## Counts are always generated from aligned BAMs and are also generated from deduplicated BAMs when deduplication is active
   activate: True
   ## Strandedness of the library, passed to the -s option
   ## 0: unstranded, 1: stranded, and 2: reversely stranded
@@ -103,6 +104,7 @@ junctions:
 ## UMI-tools configuration
 deduplicate:
   ## Boolean to specify whether alignments should be deduplicated by UMI and position
+  ## When active, featureCounts produces separate aligned and deduplicated count sets
   activate: False
   ## Keep BAM files or automatically delete them
   keep_bam: True

@@ -2,7 +2,7 @@
 
 This workflow processes raw RNA-seq FASTQ files into gene-level and transcript-level count outputs for downstream analysis in R or similar environments.
 
-The standard workflow performs raw/processed read QC, read trimming, optional merging of multiple sequencing units, STAR genome alignment, featureCounts gene-level quantification, and Salmon transcript-level quantification.
+The standard workflow performs raw/processed read QC, read trimming, optional merging of multiple sequencing units, STAR genome alignment, featureCounts gene-level quantification from aligned and optional deduplicated BAMs, and Salmon transcript-level quantification.
 Optional modules support UMI-based deduplication, splice junction extraction, RSeQC summaries, rRNA alignment checks, and genome coverage summaries.
 
 ## Contents
@@ -27,7 +27,7 @@ The main processing steps are:
 4. Genome alignment with STAR.
 5. BAM sorting and indexing with samtools.
 6. Optional UMI-based deduplication with UMI-tools.
-7. Gene-level quantification with featureCounts.
+7. Gene-level quantification from aligned and, when enabled, UMI-deduplicated BAMs with featureCounts.
 8. Transcript-level quantification with Salmon.
 9. Optional downstream QC and diagnostic modules.
 
@@ -52,7 +52,7 @@ config/units.tsv
 Then perform a dry-run:
 
 ```bash
-snakemake -n
+snakemake -n --software-deployment-method conda
 ```
 
 The default `config/samples.tsv` and `config/units.tsv` contain placeholder sample names and FASTQ filenames.
@@ -80,7 +80,8 @@ Dry-run the paired-end test workflow:
 ```bash
 snakemake -n \
     --configfile .test/config_pe/config.yaml \
-    --workflow-profile workflow/profiles/test
+    --workflow-profile workflow/profiles/test \
+    --software-deployment-method conda
 ```
 
 Dry-run the single-end test workflow:
@@ -88,7 +89,8 @@ Dry-run the single-end test workflow:
 ```bash
 snakemake -n \
     --configfile .test/config_se/config.yaml \
-    --workflow-profile workflow/profiles/test
+    --workflow-profile workflow/profiles/test \
+    --software-deployment-method conda
 ```
 
 To run the test workflow and keep temporary/intermediate outputs for inspection, omit `-n` and add `--notemp`:
@@ -97,6 +99,7 @@ To run the test workflow and keep temporary/intermediate outputs for inspection,
 snakemake \
     --configfile .test/config_pe/config.yaml \
     --workflow-profile workflow/profiles/test \
+    --software-deployment-method conda \
     --notemp
 ```
 
@@ -111,7 +114,8 @@ The exact outputs depend on which modules are activated in `config/config.yaml`.
 | Merge | `results/merge/fastq/` |
 | STAR genome alignment | `results/align/bam/{sample}.bam`, `results/align/bam/{sample}.bam.bai`, `results/align/log/` |
 | UMI deduplication | `results/deduplicate/bam/{sample}.bam`, `results/deduplicate/bam/{sample}.bam.bai`, `results/deduplicate/log/` |
-| featureCounts | `results/featureCounts/{unstranded,stranded,reverse}/all.featureCounts` |
+| featureCounts, aligned | `results/featureCounts/align/{unstranded,stranded,reverse}/all.featureCounts` |
+| featureCounts, deduplicated | `results/featureCounts/deduplicate/{unstranded,stranded,reverse}/all.featureCounts` |
 | Salmon | `results/salmon/{sample}/quant.sf` |
 | Junctions | `results/junctions/{sample}.adj.bed` |
 | RSeQC read distribution | `results/rseqc/read_distribution/{sample}.read_distribution.txt` |
@@ -122,6 +126,8 @@ The exact outputs depend on which modules are activated in `config/config.yaml`.
 By default, featureCounts runs for all three strandedness settings: unstranded, stranded, and reverse-stranded.
 This is useful for inferring library strandedness from the assignment summaries.
 If strandedness is already known, set only the appropriate value in `config/config.yaml`.
+Aligned featureCounts outputs are always generated when featureCounts is active.
+When UMI deduplication is active, a second set of featureCounts outputs is generated from the deduplicated BAMs.
 
 ## Optional Modules
 
@@ -136,7 +142,8 @@ Optional modules are controlled in `config/config.yaml`.
 | `rrna.activate` | Align reads to an rDNA/rRNA reference and index the resulting BAM files. |
 | `coverage.activate` | Produce coverage summaries across genome, exon, intron, and intergenic regions. |
 
-When deduplication is activated, downstream BAM-consuming modules use deduplicated BAM files where supported.
+When deduplication is activated, featureCounts produces both aligned and deduplicated count sets.
+Other supported downstream BAM-consuming modules use deduplicated BAM files.
 
 ## Reference Files
 

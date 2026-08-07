@@ -70,6 +70,10 @@ def is_paired_end(sample):
 paired_end_samples = [is_paired_end(i) for i in samples["sample"]]
 single_end_samples = [not i for i in paired_end_samples]
 
+featureCounts_bam_sources = ["align"]
+if config["deduplicate"]["activate"]:
+    featureCounts_bam_sources.append("deduplicate")
+
 
 assert all(paired_end_samples) or all(
     single_end_samples
@@ -112,6 +116,7 @@ wildcard_constraints:
     SAMPLE="|".join(samples["sample"]),
     UNIT="|".join(units["unit"]),
     PAIRTAG="|".join(pair_tags),
+    BAM_SOURCE="|".join(featureCounts_bam_sources),
 
 
 ####
@@ -203,28 +208,17 @@ def junctions_inputs(wildcards):
 
 
 def featureCounts_inputs(wildcards):
-    if config["deduplicate"]["activate"]:
-        return {
-            "samples": expand(
-                "results/deduplicate/bam/{SAMPLE}.bam",
-                SAMPLE=samples["sample"]
-            ),
-            "bai": expand(
-                "results/deduplicate/bam/{SAMPLE}.bam.bai",
-                SAMPLE=samples["sample"]
-            )
-        }
-    else:
-        return {
-            "samples": expand(
-                "results/align/bam/{SAMPLE}.bam",
-                SAMPLE=samples["sample"]
-            ),
-            "bai": expand(
-                "results/align/bam/{SAMPLE}.bam.bai",
-                SAMPLE=samples["sample"]
-            )
-        }
+    bam_dir = f"results/{wildcards.BAM_SOURCE}/bam"
+    return {
+        "samples": expand(
+            f"{bam_dir}/{{SAMPLE}}.bam",
+            SAMPLE=samples["sample"]
+        ),
+        "bai": expand(
+            f"{bam_dir}/{{SAMPLE}}.bam.bai",
+            SAMPLE=samples["sample"]
+        )
+    }
 
 
 def salmon_inputs(wildcards):
@@ -341,6 +335,11 @@ def workflow_outputs():
         outputs.extend(expand("results/align/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
         outputs.extend(expand("results/align/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
 
+    ## Deduplicated reads
+    if config["deduplicate"]["activate"] and config["deduplicate"]["keep_bam"]:
+        outputs.extend(expand("results/deduplicate/bam/{SAMPLE}.bam", SAMPLE=samples["sample"]))
+        outputs.extend(expand("results/deduplicate/bam/{SAMPLE}.bam.bai", SAMPLE=samples["sample"]))
+
     ## Regtools splice junctions
     if config["junctions"]["activate"]:
         outputs.extend(
@@ -350,10 +349,13 @@ def workflow_outputs():
     ## Gene-level counts (featureCounts)
     if config["featureCounts"]["activate"]:
         strandedness_labels = ["unstranded", "stranded", "reverse"]
-        for i in config["featureCounts"]["strandedness"]:
-            outputs.append(
-                f"results/featureCounts/{strandedness_labels[i]}/all.featureCounts"
-            )
+        for bam_source in featureCounts_bam_sources:
+            for i in config["featureCounts"]["strandedness"]:
+                output_prefix = (
+                    f"results/featureCounts/{bam_source}/"
+                    f"{strandedness_labels[i]}/all.featureCounts"
+                )
+                outputs.extend([output_prefix, f"{output_prefix}.summary"])
 
     ## Transcript-level counts (Salmon)
     if config["salmon"]["activate"]:
